@@ -1,20 +1,16 @@
-package net.onlex.api;
+package onlexnet.sinnet.actests.api;
 
 import java.util.List;
 
-import org.eclipse.microprofile.graphql.NonNull;
-import org.eclipse.microprofile.graphql.Query;
-
-import io.smallrye.graphql.client.typesafe.api.NestedParameter;
 import lombok.Data;
 
 public interface AppApiQuery {
 
-  @Query("Projects")
-  ProjectListQuery projectList(@NestedParameter("list") @NonNull String name);
+  // @Query("Projects")
+  // ProjectListQuery projectList(@NestedParameter("list") @NonNull String name);
 
-  @Query("Projects")
-  ProjectsQuery3 projectsCount();
+  // @Query("Projects")
+  // ProjectsQuery3 projectsCount();
 
   @Data
   class ProjectsQuery3 {
@@ -35,8 +31,8 @@ public interface AppApiQuery {
 
   @Data
   class ProjectEntity {
-    private @NonNull Entity entity;
-    private @NonNull String name;
+    private Entity entity;
+    private String name;
   }
 
 }

@@ -1,12 +1,12 @@
-package net.onlex;
+package onlexnet.sinnet.actests.steps;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java8.PendingException;
-import net.onlex.support.Project;
-import net.onlex.support.Sessions;
-import net.onlex.support.UserEmail;
+import onlexnet.sinnet.actests.support.Project;
+import onlexnet.sinnet.actests.support.Sessions;
+import onlexnet.sinnet.actests.support.UserEmail;
 
 public final class TimesheetsOperations {
 

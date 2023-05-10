@@ -1,12 +1,11 @@
-package net.onlex.support;
-
-import javax.enterprise.context.ApplicationScoped;
+package onlexnet.sinnet.actests.support;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.stereotype.Component;
 
 import io.cucumber.java.ParameterType;
 
-@ApplicationScoped
+@Component
 public class ParameterTypes {
 
   @ParameterType("user[1-9]|operator[1-9]")

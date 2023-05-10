@@ -1,30 +1,25 @@
-package net.onlex.api;
+package onlexnet.sinnet.actests.api;
 
 import java.time.LocalDate;
 
-import org.eclipse.microprofile.graphql.Id;
-import org.eclipse.microprofile.graphql.Mutation;
-import org.eclipse.microprofile.graphql.NonNull;
-
-import io.smallrye.graphql.client.typesafe.api.NestedParameter;
 import lombok.Data;
 import lombok.Value;
 
 public interface AppApiMutation {
 
-  @Mutation("Projects")
-  SaveProjectResult saveProject(@NestedParameter("save") @NonNull String name);
+  // @Mutation("Projects")
+  // SaveProjectResult saveProject(@NestedParameter("save") @NonNull String name);
 
-  @Mutation("Projects")
-  RemoveProjectQuery removeProject(@NestedParameter("remove") @NonNull ProjectId projectId);
+  // @Mutation("Projects")
+  // RemoveProjectQuery removeProject(@NestedParameter("remove") @NonNull ProjectId projectId);
 
-  @Mutation("Actions")
-  NewActionResult newAction(@NonNull @Id String projectId, @NestedParameter("newAction") @NonNull LocalDate whenProvided);
+  // @Mutation("Actions")
+  // NewActionResult newAction(@NonNull @Id String projectId, @NestedParameter("newAction") @NonNull LocalDate whenProvided);
 
-  @Mutation("Projects")
-  WithOperatorResult assignOperator(@NestedParameter("project") @NonNull @Id String eid,
-      @NestedParameter("project") @NonNull @Id long etag,
-      @NestedParameter("project.withOperator") @NonNull String operatorEmail);
+  // @Mutation("Projects")
+  // WithOperatorResult assignOperator(@NestedParameter("project") @NonNull @Id String eid,
+  //     @NestedParameter("project") @NonNull @Id long etag,
+  //     @NestedParameter("project.withOperator") @NonNull String operatorEmail);
 
   @Data
   class WithOperatorResult {
@@ -73,8 +68,8 @@ public interface AppApiMutation {
 
   @Data
   class ProjectEntity {
-    private @NonNull EntityInput entity;
-    private @NonNull String name;
+    private EntityInput entity;
+    private String name;
   }
 
   @Value

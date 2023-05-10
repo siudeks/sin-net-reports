@@ -1,17 +1,17 @@
-package net.onlex;
+package onlexnet.sinnet.actests.steps;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.enterprise.context.ApplicationScoped;
+import org.springframework.stereotype.Component;
 
 import com.microsoft.aad.msal4j.PublicClientApplication;
 import com.microsoft.aad.msal4j.UserNamePasswordParameters;
 
-import io.smallrye.mutiny.Uni;
+import io.vavr.concurrent.Future;
 import lombok.SneakyThrows;
 
-@ApplicationScoped
+@Component
 public class AzureAD {
 
   /**
@@ -20,7 +20,7 @@ public class AzureAD {
    * @return idToken
    */
   @SneakyThrows
-  public Uni<String> signIn(UserLoginProps props) {
+  public String signIn(UserLoginProps props) {
     // https://docs.microsoft.com/en-us/azure/active-directory-b2c/b2clogin
     // https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-authentication-flows#usernamepassword-ropc
     // https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/AAD-B2C-specifics#resource-owner-password-credentials-ropc-with-b2c
@@ -46,6 +46,6 @@ public class AzureAD {
         .tenant(tenantId)
         .build();
     var tokenPromise = pca.acquireToken(params);
-    return Uni.createFrom().completionStage(tokenPromise).map(it -> it.idToken());
+    return tokenPromise.join().idToken();
   }
 }

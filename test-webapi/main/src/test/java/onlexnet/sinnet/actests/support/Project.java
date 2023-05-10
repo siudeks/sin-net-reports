@@ -1,4 +1,4 @@
-package net.onlex.support;
+package onlexnet.sinnet.actests.support;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

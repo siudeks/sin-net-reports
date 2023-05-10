@@ -1,11 +1,11 @@
-package net.onlex.support;
+package onlexnet.sinnet.actests.support;
 
 import io.vavr.collection.HashMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import net.onlex.api.AppApiStateful;
-import net.onlex.api.SessionState;
+import onlexnet.sinnet.actests.api.AppApiStateful;
+import onlexnet.sinnet.actests.api.SessionState;
 
 public final class Sessions {
 

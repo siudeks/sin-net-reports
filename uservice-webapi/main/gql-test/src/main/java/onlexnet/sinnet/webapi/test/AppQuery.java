@@ -26,7 +26,7 @@ public class AppQuery {
     var client = WebTestClient.bindToServer()
         .responseTimeout(Duration.ofMinutes(10))
         .baseUrl(rootUri + "/graphql")
-        .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + createTestJwt())
+        .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " +  Jwt.createTestJwt("some@email"))
         .build();
 
     var tester = HttpGraphQlTester.create(client);
@@ -36,17 +36,6 @@ public class AppQuery {
         .execute()
         .path("Projects.list")
         .entityList(ProjectEntityGql.class);
-  }
-
-  String createTestJwt() {
-    var secret = "my super secret key to sign my dev JWT token";
-    return JWT.create()
-        .withSubject("a@b.c")
-        .withIssuer("https://issuer")
-        .withClaim("emails", List.of("a@b.c"))
-        .withIssuedAt(Instant.now())
-        .withExpiresAt(ZonedDateTime.now().plusHours(1).toInstant())
-        .sign(Algorithm.HMAC256(secret));
   }
 
 }

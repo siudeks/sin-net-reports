@@ -1,12 +1,12 @@
-package net.onlex.api;
+package onlexnet.sinnet.actests.api;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
-import net.onlex.api.AppApiMutation.ProjectEntity;
-import net.onlex.api.AppApiMutation.ProjectId;
+import onlexnet.sinnet.actests.api.AppApiMutation.ProjectEntity;
+import onlexnet.sinnet.actests.api.AppApiMutation.ProjectId;
 
 @RequiredArgsConstructor
 public class SessionState {

@@ -1,4 +1,4 @@
-package net.onlex.support;
+package onlexnet.sinnet.actests.support;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
