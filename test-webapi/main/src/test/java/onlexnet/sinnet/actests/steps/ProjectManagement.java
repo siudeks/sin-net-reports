@@ -1,18 +1,11 @@
 package onlexnet.sinnet.actests.steps;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.assertj.core.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.vavr.collection.Stream;
-import lombok.val;
-import lombok.experimental.ExtensionMethod;
 import onlexnet.sinnet.actests.support.Sessions;
 import onlexnet.sinnet.actests.support.UserEmail;
 

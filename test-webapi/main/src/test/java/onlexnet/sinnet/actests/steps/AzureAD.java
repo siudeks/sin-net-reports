@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import com.microsoft.aad.msal4j.PublicClientApplication;
 import com.microsoft.aad.msal4j.UserNamePasswordParameters;
 
-import io.vavr.concurrent.Future;
 import lombok.SneakyThrows;
 
 @Component

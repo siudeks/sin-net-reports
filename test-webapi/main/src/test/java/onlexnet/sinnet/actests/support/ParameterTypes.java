@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import io.cucumber.java.ParameterType;
 
-@Component
 public class ParameterTypes {
 
   @ParameterType("user[1-9]|operator[1-9]")
