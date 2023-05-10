@@ -9,6 +9,8 @@
 raport.sin.net.pl
 {{- else if eq $envName "stg01" -}}
 beta.raport.sin.net.pl
+{{- else if eq $envName "local" -}}
+sinnet.local
 {{- else -}}
 {{ $envName }}.raport.sin.net.pl
 {{- end -}}

@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "dapr-debug",
+			"type": "dapr",
+			"appId": "webapi",
+			"appPort": 11010,
+			"grpcPort": 11019,
+			"appProtocol": "http",
+			"componentsPath": "../../.components",
+		},
+		{
+			"label": "dapr-down",
+			"type": "daprd-down",
+			"appId": "webapi",
+		}
+	]
+}

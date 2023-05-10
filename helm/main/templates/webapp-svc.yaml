@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: webapp-svc
+  name: uservice-ui
   labels:
-    app: webapp-scv
+    app: uservice-ui
 spec:
   type: NodePort
   ports:

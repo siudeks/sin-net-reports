@@ -1,0 +1,9 @@
+databaseChangeLog:
+- changeSet:
+    id: 20221104-0002
+    author: siudeks
+    changes:
+    - modifyDataType:
+        tableName: projects
+        columnName: entity_version
+        newDataType: BIGINT

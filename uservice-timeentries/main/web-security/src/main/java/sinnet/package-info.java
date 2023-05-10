@@ -1,3 +1,0 @@
-/** Fixme. */
-package sinnet;
-

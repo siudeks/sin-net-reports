@@ -2,11 +2,11 @@
 
 | Pipeline | Status |
 |----------|--------|
-| WebApp | [![Build Status](https://dev.azure.com/onlex/sinnet/_apis/build/status/onlex-sinnet-webapp?branchName=master)](https://dev.azure.com/onlex/sinnet/_build/latest?definitionId=2&branchName=master) |
-| WebApi | [![Build Status](https://dev.azure.com/onlex/sinnet/_apis/build/status/onlex-sinnet-webapi?branchName=master)](https://dev.azure.com/onlex/sinnet/_build/latest?definitionId=4&branchName=master) |
-| Customers | [![Build Status](https://dev.azure.com/onlex/sinnet/_apis/build/status/onlex-sinnet-customers?branchName=master)](https://dev.azure.com/onlex/sinnet/_build/latest?definitionId=11&branchName=master) |
-| Helm | [![Build Status](https://dev.azure.com/onlex/sinnet/_apis/build/status/onlex-sinnet-helm?branchName=master)](https://dev.azure.com/onlex/sinnet/_build/latest?definitionId=12&branchName=master) |
-| Deploy| [![Build Status](https://dev.azure.com/onlex/sinnet/_apis/build/status/onlex-sinnet-deploy?branchName=master)](https://dev.azure.com/onlex/sinnet/_build/latest?definitionId=15&branchName=master) |
+| WebApp | [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-webapp?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=2&branchName=master) |
+| WebApi | [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-webapi?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=4&branchName=master) |
+| Customers | [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-customers?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=11&branchName=master) |
+| Helm | [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-helm?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=12&branchName=master) |
+| Deploy| [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-deploy?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=15&branchName=master) |
 
 ## Goal
 - Small project created for [Sin.Net](http://www.sin.net.pl/)
@@ -24,7 +24,7 @@ In scope:
 ## Prepare dev environment
 * Use WSL2
 * Install VSCode
-* Install java 11 using SDKMAN
+* Install java 17 using SDKMAN
 * install npm using [nvm](https://github.com/nvm-sh/nvm)
 
 ## To run locally for tests
@@ -44,6 +44,6 @@ In scope:
 
 ## Run locally the whole stack
 ```bash
-docker-compose \
--f service-postgres/dc.yaml up --build
+docker-compose up --build # (to rebuild used initdb modeules)
+# docker-compose up to run faster last configuration
 ```

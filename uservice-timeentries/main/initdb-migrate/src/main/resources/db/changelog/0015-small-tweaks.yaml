@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:  
+      id: 20221126-0918
+      author: siudeks
+      changes:
+        - modifyDataType:
+            tableName: actions
+            columnName: duration
+            newDataType: int4
+        - modifyDataType:
+            tableName: actions
+            columnName: entity_version
+            newDataType: int8
+        - modifyDataType:
+            tableName: customers
+            columnName: entity_version
+            newDataType: int8
+      rollback:
+        - modifyDataType:
+            tableName: actions
+            columnName: duration
+            newDataType: int8
+        - modifyDataType:
+            tableName: actions
+            columnName: entity_version
+            newDataType: int4
+        - modifyDataType:
+            tableName: customers
+            columnName: entity_version
+            newDataType: int4

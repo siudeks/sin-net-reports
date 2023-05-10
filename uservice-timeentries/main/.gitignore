@@ -1,5 +1,6 @@
 target
-.vscode
+bin/
+!.vscode
 .settings
 .classpath
 .project

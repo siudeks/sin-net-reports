@@ -1,80 +1,88 @@
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>sinnet</artifactId>
-    <groupId>net.siudek</groupId>
-    <version>${revision}</version>
-    <relativePath>../base-pom/pom.xml</relativePath>
-  </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+      <groupId>onlexnet.sinnet</groupId>
+      <artifactId>uservice-timeentries-base</artifactId>
+      <version>${revision}</version>
+      <relativePath>../base-pom/pom.xml</relativePath>
+    </parent>
+  
+    <artifactId>uservice-timeentries-report-aggregate</artifactId>
+  
+    <properties>
+      <!-- The module is just to keep aggregated jacoco reports, so no required to be in included in
+      Sonar reports. -->
+      <sonar.skip>true</sonar.skip>
+    </properties>
+  
+  
+    <dependencies>
+  
+      <dependency>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-timeentries-host</artifactId>
+      </dependency>
+  
+      <dependency>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-timeentries-initdb</artifactId>
+      </dependency>
 
-  <groupId>net.siudek</groupId>
-  <artifactId>report-aggregate</artifactId>
-  <version>${revision}</version>
-
-  <name>report-aggregate</name>
-
-  <properties>
-    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
-  </properties>
-
-
-  <dependencies>
-    <dependency>
-      <groupId>net.siudek</groupId>
-      <artifactId>domain-api</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>net.siudek</groupId>
-      <artifactId>domain-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>net.siudek</groupId>
-      <artifactId>web-server</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>net.siudek</groupId>
-      <artifactId>web-graphql</artifactId>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <configuration>
-          <rules>
-            <rule>
-              <element>BUNDLE</element>
-              <limits>
-                <limit>
-                  <counter>INSTRUCTION</counter>
-                  <value>COVEREDRATIO</value>
-                  <minimum>0.80</minimum>
-                </limit>
-                <limit>
-                  <counter>CLASS</counter>
-                  <value>MISSEDCOUNT</value>
-                  <maximum>0</maximum>
-                </limit>
-              </limits>
-            </rule>
-          </rules>
-        </configuration>
-        <executions>
-          <execution>
-            <id>report</id>
-            <goals>
-              <goal>report-aggregate</goal>
-            </goals>
-            <phase>verify</phase>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
-</project>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>1.15.2</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  
+    <build>
+      <plugins>
+  
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <configuration>
+            <rules>
+              <rule>
+                <element>BUNDLE</element>
+                <limits>
+                  <limit>
+                    <counter>INSTRUCTION</counter>
+                    <value>COVEREDRATIO</value>
+                    <minimum>0.80</minimum>
+                  </limit>
+                  <limit>
+                    <counter>CLASS</counter>
+                    <value>MISSEDCOUNT</value>
+                    <maximum>0</maximum>
+                  </limit>
+                </limits>
+              </rule>
+            </rules>
+          </configuration>
+          <executions>
+            <execution>
+              <id>report</id>
+              <goals>
+                <goal>report-aggregate</goal>
+              </goals>
+              <phase>verify</phase>
+            </execution>
+          </executions>
+        </plugin>
+  
+        <plugin>
+          <groupId>com.google.cloud.tools</groupId>
+          <artifactId>jib-maven-plugin</artifactId>
+          <configuration>
+            <!-- We don't want jib to execute on this module-->
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+  
+      </plugins>
+    </build>
+  
+  </project>
+  

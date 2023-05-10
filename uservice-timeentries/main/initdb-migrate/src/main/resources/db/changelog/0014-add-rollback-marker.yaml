@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:  
+      id: 20221106-1557
+      author: siudeks
+      changes:  
+        - tagDatabase:
+            tag: v0

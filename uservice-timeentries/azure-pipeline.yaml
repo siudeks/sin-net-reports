@@ -48,12 +48,6 @@ jobs:
           echo "##vso[task.setvariable variable=my_version]$(cat uservice-timeentries/.version)"
         displayName: Read version from local .version file
 
-      - bash: |
-          ./links.sh
-          cp -Lr .links .links-COPY && rm -r .links && mv .links-COPY .links
-        workingDirectory: uservice-timeentries
-        displayName: Create local copy of used external resources
-
       - task: Maven@3
         env:
           # pom.xml uses SONAR_TOKEN env variable to communicate with sonarcloud.
@@ -68,7 +62,7 @@ jobs:
           mavenPomFile: 'uservice-timeentries/main/pom.xml'
           goals: 'verify'
           javaHomeOption: 'JDKVersion'
-          jdkVersionOption: '1.11'
+          jdkVersionOption: '1.17'
           jdkArchitectureOption: 'x64'
           publishJUnitResults: false
           # options:

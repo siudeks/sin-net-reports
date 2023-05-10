@@ -31,7 +31,7 @@ RUN REVISION=$(cat /app/.version) && \
 #----------
 # list of images is located @ https://hub.docker.com/_/microsoft-java-jre-headless
 # If you are considering to use newest image, update compilation platform and local java version as well
-FROM mcr.microsoft.com/java/jre-headless:11u11-zulu-alpine as dist
+FROM mcr.microsoft.com/java/jre-headless:17u1-zulu-alpine as dist
 
 # Copy well known (defined by Spring Boot) jar layers
 # more: https://www.baeldung.com/docker-layers-spring-boot#3-dockerfile-configuration

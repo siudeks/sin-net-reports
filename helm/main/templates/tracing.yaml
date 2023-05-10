@@ -1,0 +1,12 @@
+# https://docs.dapr.io/operations/monitoring/tracing/setup-tracing/
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: tracing
+spec:
+  tracing:
+    samplingRate: "1"
+    otel:
+      protocol: grpc
+      endpointAddress: "onlexnet-infra-opentelemetry-collector.onlexnet-infra.svc.cluster.local:4317"
+      isSecure: false

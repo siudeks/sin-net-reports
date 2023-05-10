@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:  
+      id: 20220507-1
+      author: siudeks
+      changes:  
+        - tagDatabase:
+            tag: v0
+  - changeSet:  
+      id: 20220507-2
+      author: siudeks
+      changes:  
+        - createTable:
+            tableName: PROJECT
+            columns:
+            - column:
+                name: ENTITY_ID
+                type: UUID
+                constraints:
+                  primaryKey: true
+                  primaryKeyName: PROJECT_PK
+                  nullable: false
+            - column:
+                name: ENTITY_VERSION
+                type: BIGINT
+                constraints:
+                  nullable: false
+            - column:
+                name: NAME
+                type: VARCHAR(50)
+                constraints:
+                  nullable: false
+            - column:
+                name: EMAIL_OF_OWNER
+                type: VARCHAR(50)
+                constraints:
+                  nullable: false
+        - createTable:
+            tableName: PROJECT_OPERATOR
+            columns:
+            - column:
+                name: PROJECT_ID
+                type: UUID
+                constraints:
+                  nullable: false
+                  foreignKeyName: PROJECT_OPERATOR_FK1
+                  references: project(ENTITY_ID)
+            - column:
+                name: EMAIL
+                type: VARCHAR(50)
+                constraints:
+                  nullable: false

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uservice-ui
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  
+  template:
+    metadata:
+      labels:
+        app: webapp
+    
+    spec:
+      containers:
+        - name: webapp
+          image: sinnet.azurecr.io/webapp:{{ required "Tag of WebApp image has to be provided" .Values.imageWebAppTag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 80

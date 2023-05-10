@@ -52,8 +52,9 @@ export TF_VAR_onlex_sinnet_azdo_service_url="https://dev.azure.com/onlex"
 * Assumption: use bash
 * go to folder of the environment where you would like to apply changes (e.g. cd environments/dev01/)
 * **ssh -L 5432:localhost:5432 -L 16443:localhost:16443 <USERNAME>@raport.sin.net.pl** open session to unmanaged resources required by providers 
-  * get access to remote secured database   because database is (by design) secured on remote VM, and remote microk8s is also secured we assume port 5432 is already redirected from database VM, and 16443 from microk8s
-* **. ~/onlex-sinnet-init.sh** set env variables 
+  * Now you may setup access to remote secured database as it is exposed as localhost:5432 thanks to ssh connection. Also remote microk8s is available at localhost:16443. Do not close thet session, keep it open till the end of your work with database and kubernetes (it means, in practive, terraform as well as it used those two resources)
+* open new shell
+**TODO . ~/onlex-sinnet-init.sh** set env variables 
 * apply changes on selected env manually
   ```bash
   cd environments/dev01

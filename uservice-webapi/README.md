@@ -1,4 +1,4 @@
-# Quarkus GraphQL endpoint
+# GraphQL endpoint
 
 ## Technical aspects:
 - Native build

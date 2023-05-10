@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Program with Dapr",
+            "request": "launch",
+            "mainClass": "sinnet.host.Program",
+            "projectName": "uservice-timeentries-host",
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "dev",
+                "DATABASE_HOST": "localhost",
+                "DATABASE_PORT": "5432",
+                "DATABASE_NAME": "devlocaldb",
+                "DATABASE_USERNAME": "uservice_timeentries_role_name",
+                "DATABASE_PASSWORD": "uservice_timeentries_role_password",
+                "DATABASE_SCHEMA": "uservice_timeentries"
+            },
+            "preLaunchTask": "dapr-debug",
+            "postDebugTask": "dapr-down"
+        }
+    ]
+}

@@ -1,9 +1,0 @@
-management:
-    metrics:
-        binders:
-            jvm:
-                enabled: true      
-
-graphql:
-    servlet:
-        corsEnabled: true

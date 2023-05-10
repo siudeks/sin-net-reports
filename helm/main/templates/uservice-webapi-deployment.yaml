@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uservice-webapi
+  labels:
+    app: uservice-webapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uservice-webapi
+  
+  template:
+    metadata:
+      labels:
+        app: uservice-webapi
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/config: "tracing"
+        dapr.io/app-id: "uservice-webapi"
+        dapr.io/app-port: "8080"
+        dapr.io/app-protocol: "http"
+    
+    spec:
+      volumes:
+      - name: data-volume
+        emptyDir: {}
+      imagePullSecrets:
+        - name: regcred
+      initContainers:
+        - name: download-otel
+          image: curlimages/curl
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              #!/bin/bash
+              echo "Download OTEL lib"
+              # -L used to avoid downloading file with size 0
+              curl -L -o /pod-data/opentelemetry-javaagent.jar https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.25.1/opentelemetry-javaagent.jar
+          volumeMounts:
+          - name: data-volume
+            mountPath: /pod-data
+      containers:
+        - name: uservice-webapi
+          image: sinnet.azurecr.io/uservice-webapi-host:{{ required "Tag of uservice-webapi image has to be provided" .Values.imageUserviceWebApiTag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 8080
+          env:
+          
+          - name: SPRING_PROFILES_ACTIVE
+            value: "prod"
+
+          # OTEL
+          # https://opentelemetry.io/docs/instrumentation/java/automatic/#setup
+          # https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/
+          - name: JAVA_TOOL_OPTIONS
+            value: "-javaagent:/pod-data/opentelemetry-javaagent.jar"
+          - name: OTEL_SERVICE_NAME
+            value: "uservice-webapi"
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://onlexnet-infra-opentelemetry-collector.onlexnet-infra.svc.cluster.local:4317
+          - name: OTEL_EXPORTER_OTLP_PROTOCOL
+            value: grpc
+          volumeMounts:
+          - name: data-volume
+            mountPath: /pod-data
+      

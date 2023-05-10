@@ -1,0 +1,50 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-timeentries-base</artifactId>
+        <version>${revision}</version>
+        <relativePath>../base-pom/pom.xml</relativePath>
+    </parent>
+    <artifactId>uservice-timeentries-initdb</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>onlexnet.sinnet</groupId>
+            <artifactId>uservice-timeentries-initdb-migrate</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>onlexnet.sinnet</groupId>
+            <artifactId>uservice-timeentries-initdb-test</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
+  

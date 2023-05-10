@@ -1,44 +1,70 @@
-# Starts all systems excluding WebApp sos that
-# 1) all E2E tests can be started (in docker image as well in HELM installation)
-# 2) WebApp may refer to application to do some smoke tests
+# Starts equivalent of 'external services' as much as we can. 
+# If something is not dockerizable, we should refer to DEV instances.
+
+name: sinnet
 
 version: '3.8'
 services:
-  postgres:
+  service-postgres-dc:
     build:
       context: service-postgres
+      # specially prepared dockerfile to init database schemas per application
+      # in the same way how the expect in local stack
+      # and run initdb parts of all uservices
       dockerfile: Dockerfile.dev
     environment:
       - POSTGRES_USER=devlocaldb
       - POSTGRES_PASSWORD=devlocaldb
     ports:
       - 5432:5432
-  
-  # webapp:
-  #   # https://dev.to/igmrrf/docker-react-exited-with-code-0-398n
-  #   build:
-  #     context: webapp/main
-  #     dockerfile: Dockerfile.dev
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - uservice-timeentries
-  #   uservice-timeentries:
-  #     build:
-  #       context: uservice-timeentries/main
-  #       dockerfile: Dockerfile.dev
-  #     ports:
-  #       - "8080:8080"  
-  #     environments:
-  #       - "POSTGRES_URL=db"
-  #       - ...
-  #     depends_on:
-  #       - pgsql
-  #   pgsql:
-  #     image: postgres:10-alpine
-  #     environment:
-  #       - "POSTGRES_PASSWORD=asdsadas"
-  #     ports:
-  #       - "5432:5432"
 
-    
+  # init-local-sdk:
+  #   image: local-stack-java-sdk
+  #   build:
+  #     context: service-localsdk
+  #     dockerfile: Dockerfile.local
+
+  # projects-initdb-host:
+  #   build:
+  #     context: uservice-projects/main
+  #     dockerfile: ./initdb-host/Dockerfile.local
+  #   environment:
+  #     # well-known properties defined by init scripts of our postgresql
+  #     - DATABASE_HOST=service-postgres-dc
+  #     - DATABASE_PORT=5432
+  #     - DATABASE_NAME=devlocaldb
+  #     - DATABASE_USERNAME=uservice_projects_role_name
+  #     - DATABASE_PASSWORD=uservice_projects_role_password
+  #     - DATABASE_SCHEMA=uservice_projects
+  #   volumes:
+  #     # Map local maven repo to speed up build by avoiding downloading maven dependencies each time to new docker image
+  #     - ~/.m2/:/.m2
+  #     # Map local source files to allow run initdb module from sources
+  #     - ./uservice-projects/main/:/uservice-projects_src
+  #   depends_on:
+  #     service-postgres-dc:
+  #       condition: service_started
+  #     init-local-sdk:
+  #       condition: service_completed_successfully
+
+  # timeentries-initdb:
+  #   build:
+  #     context: uservice-timeentries/main
+  #     dockerfile: ./initdb/Dockerfile.local
+  #   environment:
+  #     # well-known properties defined by init scripts of our postgresql
+  #     - DATABASE_HOST=service-postgres-dc
+  #     - DATABASE_PORT=5432
+  #     - DATABASE_NAME=devlocaldb
+  #     - DATABASE_USERNAME=uservice_timeentries_role_name
+  #     - DATABASE_PASSWORD=uservice_timeentries_role_password
+  #     - DATABASE_SCHEMA=uservice_timeentries
+  #     - DATABASE_JDBC=jdbc:postgresql://service-postgres-dc:5432/devlocaldb
+  #   volumes:
+  #     # Map local maven repo to speed up build by avoiding downloading maven dependencies each time to new docker image
+  #     - ~/.m2/:/.m2
+  #     # Map local source files to allow run initdb module from sources
+  #     - ./uservice-timeentries/main/:/uservice-timeentries_src
+    # depends_on:
+    #    service-postgres-dc:
+    #      condition: service_started

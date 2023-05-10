@@ -1,6 +1,0 @@
-mutation AddService($entry: ServiceEntry) {
-  addService(entry: $entry) {
-    from
-    to
-  }
-}

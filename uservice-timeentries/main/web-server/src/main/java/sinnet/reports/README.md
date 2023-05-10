@@ -1,1 +1,0 @@
-https://knpcode.com/java-programs/convert-html-to-pdf-in-java-using-openhtmltopdf-pdfbox/

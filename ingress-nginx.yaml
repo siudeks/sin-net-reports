@@ -1,0 +1,62 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: public
+    meta.helm.sh/release-name: sinnet-reports
+    meta.helm.sh/release-namespace: onlex-sinnet-localhost
+  creationTimestamp: "2023-02-11T17:48:11Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: nginx
+  namespace: onlex-sinnet-localhost
+  resourceVersion: "127302"
+  uid: 464dfab0-f591-4350-ab9d-e93544754c08
+spec:
+  rules:
+  - host: sinnet.local
+    http:
+      paths:
+      - backend:
+          service:
+            name: uservice-webapi-svc
+            port:
+              number: 8080
+        path: /hello
+        pathType: Prefix
+      - backend:
+          service:
+            name: uservice-webapi-svc
+            port:
+              number: 8080
+        path: /q/graphql-ui
+        pathType: Prefix
+      - backend:
+          service:
+            name: uservice-webapi-svc
+            port:
+              number: 8080
+        path: /graphql
+        pathType: Prefix
+      - backend:
+          service:
+            name: uservice-webapi-svc
+            port:
+              number: 8080
+        path: /index.html
+        pathType: Prefix
+      - backend:
+          service:
+            name: webapp-svc
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - sinnet.local
+    secretName: portal-tls-secret
+status:
+  loadBalancer: {}

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:  
+      id: 20230503-1137
+      author: siudeks
+      changes:  
+        - createTable:
+            tableName: PROJECT_OPERATOR
+            columns:
+            - column:
+                name: PROJECT_ID
+                type: UUID
+                constraints:
+                  nullable: false
+                  foreignKeyName: PROJECT_OPERATOR_FK1
+                  references: projects(ENTITY_ID)
+            - column:
+                name: EMAIL
+                type: VARCHAR(50)
+                constraints:
+                  nullable: false

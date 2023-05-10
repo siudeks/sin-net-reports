@@ -1,0 +1,10 @@
+query AvailableProjects {
+  Projects {
+    list(name: "") {
+      entity {
+        entityId
+      }
+      name
+    }
+  }
+}

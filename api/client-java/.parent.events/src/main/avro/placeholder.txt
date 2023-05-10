@@ -1,0 +1,1 @@
+Empty default folder is required to satisfy AVRO compiler.

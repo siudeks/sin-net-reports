@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package projects;
+import "common.proto";
+
+option java_package = "sinnet.grpc.projects.generated";
+option java_outer_classname = "ProjectsProto";
+option java_multiple_files = true;
+
+service Projects {
+  rpc create(CreateRequest) returns (CreateReply);
+  rpc update(UpdateCommand) returns (UpdateResult);
+  rpc remove(RemoveCommand) returns (RemoveResult);
+  rpc list(ListRequest) returns (ListReply);
+  rpc get(GetRequest) returns (GetReply);
+  rpc userStats(UserStatsRequest) returns (UserStatsReply);
+}
+
+message RemoveCommand {
+  UserToken userToken = 1;
+  common.ProjectId projectId = 2;
+}
+message RemoveResult {
+  bool success = 1;
+}
+
+/** Empty request just to initiate creation of a new project. */
+message CreateRequest {
+  UserToken userToken = 1;
+}
+
+/** ProjectId of just created project. */
+message CreateReply {
+  common.ProjectId entityId = 1;
+}
+
+/* Test comment. */
+message UpdateCommand {
+  UserToken userToken = 1;
+  common.ProjectId entityId = 2;
+  ProjectModel desired = 3;
+}
+message UpdateResult {
+  common.ProjectId entityId = 1;
+}
+
+message ListRequest {
+  string emailOfRequestor = 1;
+}
+message ListReply {
+  repeated Project projects = 1;
+}
+
+message GetRequest {
+  common.ProjectId projectId = 1;
+}
+message GetReply {
+  ProjectModel model = 1;
+}
+
+message UserStatsRequest {
+  string emailOfRequestor = 1;
+}
+message UserStatsReply {
+  int32 numberOfProjects = 1;
+}
+
+message Project {
+  common.ProjectId id = 1;
+  ProjectModel model = 2;
+}
+
+message ProjectModel {
+  string name = 1;
+  string emailOfOwner = 2;
+  repeated string emailOfOperator = 3;
+}
+
+/** About the requestor */
+message UserToken {
+  string requestorEmail = 1;
+}

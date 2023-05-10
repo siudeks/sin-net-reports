@@ -1,0 +1,38 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: GitHub image build for uservice-timeentries
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ uservice-timeentries/**, .github/workflows/uservice-timeentries.yml ]
+  pull_request:
+    branches: [ master ]
+    paths: [ uservice-timeentries/**, .github/workflows/uservice-timeentries.yml ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build shared libs
+        run: mvn -ntp install --file pom.xml
+        working-directory: libs-java
+
+      - name: Build GRPC api
+        run: mvn -ntp install --file pom.xml
+        working-directory: api/client-java
+
+      - name: Build with Maven
+        run: mvn -ntp package --file pom.xml
+        working-directory: uservice-timeentries/main

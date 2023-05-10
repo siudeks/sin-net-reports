@@ -1,0 +1,9 @@
+{
+    "namespace": "sinnet.project.events",
+    "type": "record",
+    "name": "ProjectCreatedEvent",
+    "fields": [
+        {"name": "eid", "type": "string"},
+        {"name": "etag", "type": "long"}
+    ]
+}

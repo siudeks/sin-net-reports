@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uservice-webapi-svc
+  labels:
+    app: uservice-webapi-svc
+spec:
+  type:
+  ports:
+  - port: 8080
+  selector:
+    app: uservice-webapi

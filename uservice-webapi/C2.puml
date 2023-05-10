@@ -4,10 +4,12 @@
 Person(personAlias, "Label", "Optional Description")
 
 System_Boundary(c1, "SinNet") {
-    Container(WebApiService, "GraphQL endpoint", "GraphQL, gRpc", "Optional Description")
-    Container(TimeEntriesService, "TimeEntries uService", "gRpc", "Optional Description")
+    Container(WebApiService, "GraphQL endpoint", "GraphQL, gRpc", "TBD Description")
+    Container(ProjectsService, "Projects uService", "gRpc", "TBD Description")
+    Container(TimeEntriesService, "TimeEntries uService", "gRpc", "TBD Description")
 }
 
 Rel(personAlias, WebApiService, "Label", "Optional Technology")
 Rel(WebApiService, TimeEntriesService, "Uses", "gRpc")
+Rel(WebApiService, ProjectsService, "Uses", "gRpc")
 @enduml

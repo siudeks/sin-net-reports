@@ -1,0 +1,11 @@
+# Thos dickerfile is used in order to run in 
+# - local stack to allow for developers run application locally
+# - BDD tests
+FROM local-stack-java-sdk as build
+WORKDIR /uservice-timeentries_src
+
+# First invocation may take time as /m2 repo is mounted by docker-compose so first time may be empty ...
+# ... or not empty, if someone run maven previously.
+# Assumption is the .m2 folder is mounted in the same way as mentioned earlier uservice-trade-src folder.
+# The worst (but still working) case is when .m2 folder is not mounted properly: all dependencies will be downloaded each time when image runs
+ENTRYPOINT ./initdb/entrypoint.sh

@@ -1,0 +1,35 @@
+@startmindmap
+
+<style>
+leafNode {
+    RoundCorner 0
+}
+</style>
+
++ Root folder
+** Utility folders
+***:.attic
+<i>Some not-used stuff, probably to remove later on</i>;
+***:.docs
+<i>Main forlder for project documentation</i>;
+** Micro services
+*** uservice-webapi
+*** uservice-projects
+** Local dockerized services
+*** Databases
+**** PostgreSQL
+*** Testing
+****:.components
+<i>shared configuration of local DAPR components</i>;
+****:test-webapi
+<i>Functional acceptance tests (Gherkin)</i>;
+** Helm
+***:main
+<i>Local helm charts</i>;
+***:infra
+<i>Local helm charts for infrastructure</i>;
+
+legend right
+  Explanation of structure of folders
+endlegend
+@endmindmap

@@ -1,4 +1,0 @@
-/** FixMe. */
-
-package sinnet.gql;
-

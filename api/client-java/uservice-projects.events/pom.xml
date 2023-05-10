@@ -1,0 +1,14 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>onlexnet.sinnet</groupId>
+    <artifactId>events-parent</artifactId>
+    <version>${revision}</version>
+    <relativePath>../.parent.events/pom.xml</relativePath>
+  </parent>
+  <artifactId>uservice-projects.events</artifactId>
+
+  <properties>
+    <avro.dir>../../schema/uservice-projects.events</avro.dir>
+  </properties>
+</project>

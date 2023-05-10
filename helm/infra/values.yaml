@@ -1,0 +1,184 @@
+# Default values for onlex-infra.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+nginx-ingress:
+  # more
+  # https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
+  enabled: true
+  controller:
+    ingressClass: onlexnet
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+dapr:
+  global:
+    mtls:
+      enabled: false
+  dapr_dashboard:
+    enabled: true
+
+opentelemetry-collector:
+  # https://github.com/open-telemetry/opentelemetry-helm-charts/blob/main/charts/opentelemetry-collector/values.yaml
+  mode: deployment
+  config:
+    extensions:
+      pprof: {}
+      zpages: {}
+      health_check: {}
+      memory_ballast: {}
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: ${MY_POD_IP}:4317
+    processors:
+      batch: {}
+
+    exporters:
+
+      otlp:
+        endpoint: "onlex-infra-jaeger-collector.onlex-infra.svc.cluster.local:4317"
+        tls:
+          insecure: true
+
+      logging:
+        loglevel: info
+
+      tracing:
+      
+    service:
+      extensions: [pprof, zpages, health_check]
+      pipelines:
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp, logging]
+        metrics:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp, logging]
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp, logging]
+        
+
+# opentelemetry-operator:
+#   # https://github.com/open-telemetry/opentelemetry-helm-charts/blob/main/charts/opentelemetry-operator/values.yaml
+#   # https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/api.md
+#   # https://www.youtube.com/watch?v=X60owauFkGA&t=1481s&ab_channel=Aspecto
+#   mode: sidecar
+#   admissionWebhooks:
+#     certManager:
+#       enabled: false # <-- hack - can't install if cert-manager is not installed earlier
+#   config:
+#       receivers:
+#         otlp:
+#           protocols:
+#             grpc:
+#             http:
+#       processors:
+#         batch:
+#       exporters:
+#         logging:
+#         otlp:
+#           endpoint: "onlex-infra-opentelemetry-collector.onlex-infra.svc.cluster.local:4317"
+#           tls:
+#             insecure: true
+#       service:
+#         telemetry:
+#           logs:
+#             level: "debug"
+#         pipelines:
+#           traces:
+#             receivers: [otlp]
+#             processors: []
+#             exporters: [logging, otlp]
+
+
+# Jaeger
+# https://github.com/jaegertracing/helm-charts/blob/main/charts/jaeger/values.yaml
+# https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger#all-in-one-in-memory-configuration
+jaeger:
+  # All in One In-Memory Configuration
+  provisionDataStore:
+    cassandra: false
+  allInOne:
+    enabled: true
+  storage:
+    type: none
+  agent:
+    enabled: false
+  collector:
+    enabled: false
+  query:
+    enabled: false
+
+# https://github.com/elastic/helm-charts/blob/main/elasticsearch/values.yaml
+elasticsearch:
+
+cert-manager:
+  # https://github.com/cert-manager/cert-manager/issues/3973
+  installCRDs: true

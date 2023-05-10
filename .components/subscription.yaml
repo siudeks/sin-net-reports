@@ -1,0 +1,10 @@
+apiVersion: dapr.io/v1alpha1
+kind: Subscription
+metadata:
+  name: project
+spec:
+  topic: MYTOPICNAME
+  route: /project-created
+  pubsubname: pubsub
+scopes:
+- activities-app-id

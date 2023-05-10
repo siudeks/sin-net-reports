@@ -1,0 +1,6 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.checkstyle.version": "10.4",
+    "java.checkstyle.configuration": "/home/siudeks/git/sin-net-reports/libs-java/build-tools/src/main/resources/build-checkstyle/google_checks_customized.xml",
+    "java.compile.nullAnalysis.mode": "automatic",
+}

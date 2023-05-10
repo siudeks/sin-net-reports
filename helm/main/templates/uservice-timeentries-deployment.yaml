@@ -1,0 +1,138 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uservice-timeentries-dep
+  labels:
+    app: uservice-timeentries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uservice-timeentries
+  
+  template:
+    metadata:
+      labels:
+        app: uservice-timeentries
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/config: "tracing"
+        dapr.io/app-id: "uservice-timeentries"
+        dapr.io/app-port: "9091"
+        dapr.io/app-protocol: "grpc"
+    
+    spec:
+      volumes:
+      - name: data-volume
+        emptyDir: {}
+      imagePullSecrets:
+        - name: regcred
+      initContainers:
+        - name: download-otel
+          image: curlimages/curl
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              #!/bin/bash
+              echo "Download OTEL lib"
+              # -L used to avoid downloading file with size 0
+              curl -L -o /pod-data/opentelemetry-javaagent.jar https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.25.1/opentelemetry-javaagent.jar
+          volumeMounts:
+          - name: data-volume
+            mountPath: /pod-data
+        - name: uservice-timeentries-initdb
+          image: sinnet.azurecr.io/uservice-timeentries-initdb:{{ required "Tag of uservice-timeentries image has to be provided" .Values.imageUserviceTimeEntriesTag }}
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: "prod"
+          - name: DATABASE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_host
+          - name: DATABASE_PORT
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_port
+          - name: DATABASE_NAME
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_name
+          - name: DATABASE_SCHEMA
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_timeentries_schema
+          - name: DATABASE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_timeentries_username
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_timeentries_password
+      containers:
+        - name: uservice-timeentries
+          image: sinnet.azurecr.io/uservice-timeentries-host:{{ required "Tag of uservice-timeentries image has to be provided" .Values.imageUserviceTimeEntriesTag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 8080
+          env:
+          # OTEL
+          # https://opentelemetry.io/docs/instrumentation/java/automatic/#setup
+          # https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/
+          - name: JAVA_TOOL_OPTIONS
+            value: "-javaagent:/pod-data/opentelemetry-javaagent.jar"
+          - name: OTEL_SERVICE_NAME
+            value: "uservice-projects"
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://onlexnet-infra-opentelemetry-collector.onlexnet-infra.svc.cluster.local:4317
+          - name: OTEL_EXPORTER_OTLP_PROTOCOL
+            value: grpc
+
+          # DAPR
+          - name: APP_PORT
+            value: "9091"
+          
+          # APP
+          - name: SPRING_PROFILES_ACTIVE
+            value: "prod"
+          - name: DATABASE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_host
+          - name: DATABASE_PORT
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_port
+          - name: DATABASE_NAME
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_name
+          - name: DATABASE_SCHEMA
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_timeentries_schema
+          - name: DATABASE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_timeentries_username
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: services_database_timeentries_password
+          volumeMounts:
+          - name: data-volume
+            mountPath: /pod-data

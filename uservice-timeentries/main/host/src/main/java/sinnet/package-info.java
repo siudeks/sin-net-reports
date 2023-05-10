@@ -1,3 +1,4 @@
-/** Root package of the application. */
-
+/**
+ * Root package for the project.
+ */
 package sinnet;

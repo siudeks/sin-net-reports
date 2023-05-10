@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "sinnet.grpc.common";
+option java_outer_classname = "CommonProto";
+option java_multiple_files = true;
+
+package common;
+
+message UserToken {
+  string projectId = 1;
+  string requestorEmail = 2;
+}
+
+message EntityId {
+  string projectId = 1;
+  string entityId = 2;
+  int64 entityVersion = 3;
+}

@@ -1,0 +1,6 @@
+FROM postgres:11-alpine
+ADD scripts/1_init_uservice_customers.sql /docker-entrypoint-initdb.d
+ADD scripts/2_init_uservice_timeentries.sql /docker-entrypoint-initdb.d
+ADD scripts/3_init_uservice_projects.sql /docker-entrypoint-initdb.d
+RUN chmod a+r /docker-entrypoint-initdb.d/*
+EXPOSE 5432

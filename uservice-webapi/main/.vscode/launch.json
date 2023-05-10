@@ -1,0 +1,21 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Program with Dapr",
+            "request": "launch",
+            "mainClass": "sinnet.Program",
+            "projectName": "uservice-webapi-host",
+            "env": {
+                "DAPR_GRPC_PORT": 11019,
+            },
+            "vmArgs": "-Drevision=0.0.0-LOCAL",
+            "preLaunchTask": "dapr-debug",
+            "postDebugTask": "dapr-down"
+        }
+    ]
+}

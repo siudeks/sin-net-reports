@@ -9,6 +9,6 @@ COPY /host/src/main/jib/ /
 
 RUN /.mvnw clean compile --no-transfer-progress -Dcheckstyle.skip
 
-EXPOSE 9000
+EXPOSE 11021
 ENV SPRING_PROFILES_ACTIVE=inmemory
 ENTRYPOINT ["./mvnw", "-pl", "host", "-am", "spring-boot:run", "-Dcheckstyle.skip"]

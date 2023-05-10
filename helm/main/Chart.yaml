@@ -12,3 +12,5 @@ version: 0.3.15
 # Do not use such value as long as https://github.com/helm/helm/issues/8194 is not finished
 # Ideal should be use version combined from tags of build blocks
 appVersion: 1.0.0
+
+

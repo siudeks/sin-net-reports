@@ -1,0 +1,15 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>onlexnet.sinnet</groupId>
+    <artifactId>rpc-java-parent</artifactId>
+    <version>${revision}</version>
+    <relativePath>../.parent.rpc/pom.xml</relativePath>
+  </parent>
+  <artifactId>uservice-reports.rpc</artifactId>
+
+  <properties>
+    <proto.dir>../../schema/uservice-reports.rpc</proto.dir>
+  </properties>
+
+</project>

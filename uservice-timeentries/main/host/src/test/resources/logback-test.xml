@@ -7,7 +7,7 @@
         </layout>
     </appender>
 
-    <logger name="net.siudek" level="DEBUG">
+    <logger name="onlexnet.sinnet" level="DEBUG">
         <appender-ref ref="CONSOLE"/>
     </logger>
 

@@ -18,7 +18,7 @@
 					],
 					"background": {
 						"activeOnStart": true,
-						"beginsPattern": "[INFO] Scanning for projects...",
+						"beginsPattern": ".*[INFO] Scanning for projects...*",
 						"endsPattern": "^.*[INFO] Total time: .*\\."
 					}
 				}

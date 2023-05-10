@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:  
+      id: 20230503-1137
+      author: siudeks
+      changes:  
+        - addColumn:
+            tableName: PROJECTS
+            columns:
+            - column:
+                name: EMAIL_OF_OWNER
+                type: VARCHAR(50)
+                defaultValue: siudeks@gmail.com
+                constraints:
+                  nullable: false

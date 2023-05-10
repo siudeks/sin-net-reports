@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"appId": "activities-app-id",
+			"appPort": 11021,
+			"appProtocol": "grpc",
+			"label": "dapr-debug",
+			"componentsPath": "../../.components",
+			"type": "dapr",
+		},
+		{
+			"appId": "activities-app-id",
+			"label": "dapr-down",
+			"type": "daprd-down"
+		}
+	]
+}
