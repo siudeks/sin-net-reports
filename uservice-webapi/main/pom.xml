@@ -7,7 +7,8 @@
 
   <modules>
     <module>host</module>
-    <module>gql</module>
+    <module>gql-test</module>
+    <module>gql-model</module>
     <module>base-pom</module>
   </modules>
 

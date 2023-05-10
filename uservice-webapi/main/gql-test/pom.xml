@@ -6,7 +6,7 @@
     <version>${revision}</version>
     <relativePath>../base-pom/pom.xml</relativePath>
   </parent>
-  <artifactId>uservice-webapi-gql</artifactId>
+  <artifactId>uservice-webapi-gql-test</artifactId>
   <version>${revision}</version>
 
   <properties>
@@ -40,6 +40,11 @@
   <dependencies>
 
     <dependency>
+      <groupId>onlexnet.sinnet</groupId>
+      <artifactId>uservice-webapi-gql-model</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>com.auth0</groupId>
       <artifactId>java-jwt</artifactId>
       <version>4.4.0</version>
@@ -67,7 +72,6 @@
     <dependency>
       <groupId>org.springframework.graphql</groupId>
       <artifactId>spring-graphql-test</artifactId>
-      <scope>test</scope>
     </dependency>
     <!-- Also add this, unless "spring-boot-starter-webflux" is also present to test Subscriptions
     with GraphQL -->
@@ -88,12 +92,6 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.tngtech.archunit</groupId>
-      <artifactId>archunit-junit5</artifactId>
-      <version>0.22.0</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

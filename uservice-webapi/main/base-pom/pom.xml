@@ -14,9 +14,15 @@
 
       <dependency>
         <groupId>onlexnet.sinnet</groupId>
-        <artifactId>uservice-webapi-gql</artifactId>
+        <artifactId>uservice-webapi-gql-test</artifactId>
         <version>${revision}</version>
         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-webapi-gql-model</artifactId>
+        <version>${revision}</version>
       </dependency>
 
       <dependency>
