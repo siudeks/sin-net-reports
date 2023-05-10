@@ -1,0 +1,121 @@
+resources:
+  - repo: self
+
+variables:
+  # well-known connection, defined manually.
+  # The connection used in pipeline allows to access to ACR sinnet.azurecr.io
+  dockerRegistryServiceConnection: "sinnet-acr"
+  # name of the registry where the image should be pushed off
+  dockerRegistry: "sinnet.azurecr.io"
+  # image name (without tags) used to build final image
+  # also root name of the folder in the monorepo
+  imageName: uservice-projects
+  # Working directore for the uservice
+  workingDirectory: ${{ variables.imageName }}
+
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops#maven
+  MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2/repository
+  MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+  cacheName: $(Build.DefinitionName)
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+
+  paths:
+    include:
+      # We have to include all folders where source files are located
+      - uservice-projects
+
+pr:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      # We have to include all folders where source files are located
+      - libs-java
+      - api
+      - uservice-projects
+
+jobs:
+  - job: CI
+    displayName: uService CI build
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      dockerTag0: latest
+      dockerTag1: $(Build.SourceBranchName)-$(Build.BuildNumber)
+
+    steps:
+
+      - task: Cache@2
+        inputs:
+          key: 'maven | "$(Agent.OS)" | $(cacheName)'
+          restoreKeys: |
+            maven | "$(Agent.OS)"
+            maven
+          path: $(MAVEN_CACHE_FOLDER)
+        displayName: Cache Maven local repo
+
+      - script: |
+          docker load -i $(Pipeline.Workspace)/docker/cache.tar
+        displayName: Restore Docker cache
+        condition: and(not(canceled()), eq(variables.CACHE_RESTORED, 'true'))
+
+      - bash: |
+          echo "##vso[task.setvariable variable=SEMVERSION]$(cat .semversion)"
+        workingDirectory: $(workingDirectory)
+        displayName: Read version from .semversion file
+
+      - task: Maven@4
+        env:
+          # pom.xml uses SONAR_TOKEN env variable to communicate with sonarcloud.
+          # The crrent CI/CD pipeline has secret named SONAR_TOKEN with proper value.
+          # Problem: Azure pipeline secrets can't be used directly as environment varianbles
+          # https://github.com/Microsoft/azure-pipelines-agent/issues/145
+          # As the result, we have to put CICD secret to build variable
+          SONAR_TOKEN: $(SONAR_TOKEN)
+        displayName: 'Maven install: App/Host'
+        inputs:
+          mavenPomFile: '$(workingDirectory)/main/pom.xml'
+          # install is required to publish locally all modules as the are required in the next satep tp build docker image
+          goals: install
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.17'
+          jdkArchitectureOption: 'x64'
+          publishJUnitResults: true
+          mavenOptions: $(MAVEN_OPTS)
+          options: >
+            -B
+            --no-transfer-progress
+            -Drevision=$(SEMVERSION)
+          sonarQubeRunAnalysis: true
+          sqMavenPluginVersionChoice: 'pom' # Required when sonarQubeRunAnalysis == True# Options: latest, pom
+          checkStyleRunAnalysis: true # We use checkstyle in coding, so let's use it with Maven as well
+
+      - task: Docker@2
+        name: dockerLogin
+        displayName: Docker Login
+        inputs:
+          command: login
+          containerRegistry: $(dockerRegistryServiceConnection)
+
+      # JIB Plugin 2.2.0+ will take the DOCKER_CONFIG env variable
+      # from the previous step to deploy image during the build
+      - task: Maven@4
+        displayName: Build µService docker image
+        inputs:
+          mavenPomFile: '$(workingDirectory)/main/pom.xml'
+          goals: 'jib:build -pl host'
+          javaHomeOption: JDKVersion
+          jdkVersionOption: 1.17
+          mavenOptions: $(MAVEN_OPTS)
+          options: >
+            -B
+            --no-transfer-progress
+            -Drevision=$(SEMVERSION)
+            -Djib.to.image=$(dockerRegistry)/$(imageName)
+            -Djib.to.tags=$(dockerTag0),$(dockerTag1)

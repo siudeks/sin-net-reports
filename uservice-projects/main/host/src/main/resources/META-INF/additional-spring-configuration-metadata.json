@@ -1,5 +1,0 @@
-{"properties": [{
-  "name": "grpc.server-port",
-  "type": "java.lang.Integer",
-  "description": "A description for 'grpc.server-port'"
-}]}

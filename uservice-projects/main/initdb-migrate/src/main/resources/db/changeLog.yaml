@@ -1,9 +1,0 @@
-databaseChangeLog:
-  # enable it after migration to uppercase on all objects in database
-  # more:
-  #   - https://stackoverflow.com/questions/22616545/liquibase-postgresql-how-to-preserve-table-case-correctly
-  #   - https://docs.liquibase.com/concepts/changelogs/attributes/objectquotingstrategy.html
-  #
-  # - objectQuotingStrategy: QUOTE_ALL_OBJECTS 
-  - includeAll:
-      path: db/changeLog

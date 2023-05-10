@@ -1,5 +1,0 @@
-main/bin/**/*
-main/build/**/*
-main/.gradle/**/*
-**/.vscode
-Dockerfile

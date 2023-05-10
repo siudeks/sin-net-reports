@@ -1,0 +1,424 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>onlexnet.sinnet</groupId>
+    <artifactId>uservice-webapi-base</artifactId>
+    <version>${revision}</version>
+    <relativePath>../base-pom/pom.xml</relativePath>
+  </parent>
+  <artifactId>uservice-webapi-host</artifactId>
+  <version>${revision}</version>
+
+  <properties>
+    <api.version>0.1.1-SNAPSHOT</api.version>
+    <!--
+    <aggregate.report.dir>report-aggregate/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir> -->
+    <sonar.projectKey>sin-net-reports:${project.artifactId}</sonar.projectKey>
+    <!-- sonar properties -> https://docs.sonarqube.org/latest/analysis/analysis-parameters/ -->
+    <sonar.organization>onlexnet</sonar.organization>
+    <sonar.projectKey>sin-net-reports</sonar.projectKey>
+    <sonar.projectName>SinNet Reports</sonar.projectName>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <!-- Environment variable is already defined in CICD as SONAR_TOKEN -->
+    <sonar.login>${env.SONAR_TOKEN}</sonar.login>
+
+    <!--
+    <aggregate.report.dir>report-aggregate/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir> -->
+    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
+
+    <!--
+      Disable error:
+      [ERROR] .NET Assembly Analyzer could not be initialized and at least one 'exe' or 'dll' was
+      scanned. The 'dotnet' executable could not be found on the path; either disable the Assembly
+      Analyzer or add the path to dotnet core in the configuration.
+      [ERROR] The dotnet 6.0 core runtime or SDK is required to analyze assemblies
+    -->
+    <analyzer.assembly.enabled>false</analyzer.assembly.enabled>
+  </properties>
+
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+      <version>4.4.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>onlexnet.sinnet</groupId>
+      <artifactId>uservice-projects.rpc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>onlexnet.sinnet</groupId>
+      <artifactId>uservice-timeentries.rpc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.graphql</groupId>
+      <artifactId>spring-graphql-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Also add this, unless "spring-boot-starter-webflux" is also present to test Subscriptions
+    with GraphQL -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webflux</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.vavr</groupId>
+      <artifactId>vavr</artifactId>
+      <version>0.10.4</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.tngtech.archunit</groupId>
+      <artifactId>archunit-junit5</artifactId>
+      <version>0.22.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <exclusions>
+        <!--
+          [ERROR] One or more dependencies were identified with vulnerabilities that have a CVSS score
+        greater than or equal to '8.0':
+          [ERROR]
+          [ERROR] snakeyaml-1.33.jar: CVE-2022-1471(9.8)
+          [ERROR] uservice-projects.rpc-0.1.1-SNAPSHOT.jar: CVE-2017-8359(9.8), CVE-2020-7768(9.8),
+        CVE-2017-7861(9.8), CVE-2017-9431(9.8), CVE-2017-7860(9.8)
+          [ERROR]
+          [ERROR] See the dependency-check report for more details.
+        -->
+        <exclusion>
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+        </exclusion>
+      </exclusions>
+
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-graphql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.graphql-java</groupId>
+      <artifactId>graphql-java-extended-scalars</artifactId>
+      <version>20.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <!-- https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-spring</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-junit-platform-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <release>17</release>
+          <!-- https://stackoverflow.com/questions/46878649/maven-compilation-issue-with-java-9 -->
+          <forceJavacCompilerUse>true</forceJavacCompilerUse>
+          <compilerArgs>
+            <arg>-Werror</arg>
+            <arg>-parameters</arg>
+          </compilerArgs>
+          <annotationProcessorPaths>
+            <path>
+              <!-- Generation of properties. -->
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-configuration-processor</artifactId>
+              <version>${spring-boot.version}</version>
+            </path>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>1.18.26</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+
+    <pluginManagement>
+
+      <plugins>
+
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+          <configuration>
+            <!-- Make a fully executable jar for *nix machines by prepending a launch script to the
+            jar -->
+            <executable>true</executable>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <!--
+                  Repackages existing JAR and WAR archives so that they can be executed from the command line using
+                java -jar.
+                  With layout=NONE can also be used simply to package a JAR with nested dependencies (and no main
+                class, so not executable).
+                  https://docs.spring.io/spring-boot/docs/2.2.13.RELEASE/maven-plugin/repackage-mojo.html
+                -->
+                <goal>repackage</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <!-- https://jeremylong.github.io/DependencyCheck/dependency-check-maven/ -->
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>8.1.2</version>
+          <configuration>
+            <failBuildOnCVSS>8</failBuildOnCVSS>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.8</version>
+          <executions>
+            <execution>
+              <id>prepare-agent</id>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>report</id>
+              <phase>test</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+
+            <execution>
+              <id>jacoco-check</id>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <!-- More: https://www.jacoco.org/jacoco/trunk/doc/check-mojo.html -->
+                <rules>
+                  <rule>
+                    <!--
+                      This example requires a line coverage minimum of 50% for every class except test classes
+                    -->
+                    <element>BUNDLE</element>
+                    <excludes>
+                      <exclude>*Test</exclude>
+                    </excludes>
+                    <limits>
+                      <limit>
+                        <counter>INSTRUCTION</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.01</minimum>
+                      </limit>
+                      <limit>
+                        <!-- How many classes are not tested -->
+                        <counter>CLASS</counter>
+                        <value>MISSEDCOUNT</value>
+                        <maximum>100</maximum>
+                      </limit>
+                    </limits>
+                  </rule>
+                </rules>
+              </configuration>
+
+            </execution>
+
+          </executions>
+        </plugin>
+
+        <plugin>
+          <!--
+            more https://cloud.google.com/java/getting-started/jib
+            about reproducible images
+            https://github.com/GoogleContainerTools/jib/issues/2143#issuecomment-552920971
+          -->
+          <groupId>com.google.cloud.tools</groupId>
+          <artifactId>jib-maven-plugin</artifactId>
+          <version>3.3.1</version>
+          <configuration>
+            <from>
+              <!--
+                Instead of name, we use sha from eclipse-temurin:17.0.4
+              https://hub.docker.com/layers/library/eclipse-temurin/17.0.4.1_1-jre-alpine/images/sha256-e1506ba20f0cb2af6f23e24c7f8855b417f0b085708acd9b85344a884ba77767?context=explore
+              -->
+              <image>
+                eclipse-temurin:17.0.4.1_1-jre-alpine@sha256:e1506ba20f0cb2af6f23e24c7f8855b417f0b085708acd9b85344a884ba77767</image>
+            </from>
+          </configuration>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
+
+  </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-bom</artifactId>
+        <version>7.11.2</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-projects.rpc</artifactId>
+        <version>${api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-timeentries.rpc</artifactId>
+        <version>${api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <scope>provided</scope>
+        <version>1.18.26</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <repositories>
+    <repository>
+      <id>sinnet</id>
+      <url>https://pkgs.dev.azure.com/onlexnet/sinnet/_packaging/sinnet/maven/v1</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sinnet</id>
+      <url>https://pkgs.dev.azure.com/onlexnet/sinnet/_packaging/sinnet/maven/v1</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <profiles>
+    <!-- Not invoked currently -->
+    <profile>
+      <id>owasp-dependency-check</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

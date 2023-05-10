@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Program with Dapr",
+            "request": "launch",
+            "mainClass": "sinnet.Program",
+            "projectName": "uservice-projects-host",
+            "env": {
+                // by design such variable is automatically porvide by DAPR sidecar
+                // but in vscode we run sidecar and app separately so we need to provide it manually
+                // and use the same value in the sidecar
+                // it is used e.g. byt DaprClientBuilder
+                "DAPR_GRPC_PORT": 11019,
+                "DATABASE_HOST" : "localhost",
+                "DATABASE_PORT" : 5432,
+                "DATABASE_NAME" : "devlocaldb",
+                "DATABASE_SCHEMA": "uservice_projects",
+                "DATABASE_USERNAME": "uservice_projects_role_name",
+                "DATABASE_PASSWORD": "uservice_projects_role_password",
+            },
+            "vmArgs": "-Drevision=0.0.0-LOCAL",
+            "preLaunchTask": "dapr-debug",
+            "postDebugTask": "dapr-down"
+        }
+    ]
+}

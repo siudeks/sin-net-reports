@@ -1,0 +1,6 @@
+ENTITY_ID,ENTITY_VERSION,NAME,EMAIL_OF_OWNER
+// More:
+// https://docs.liquibase.com/change-types/load-data.html
+00000000-0000-0000-0001-000000000001,1,Siudek Test project,siudeks@gmail.com
+00000000-0000-0000-0001-000000000002,1,SinNet Test project,siudeks@gmail.com
+00000000-0000-0000-0001-000000000003,1,SinNet Production,siudeks@gmail.com

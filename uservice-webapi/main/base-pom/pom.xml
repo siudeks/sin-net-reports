@@ -1,0 +1,48 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>onlexnet.sinnet</groupId>
+    <artifactId>uservice-spring-parent</artifactId>
+    <version>0.1.3-SNAPSHOT</version>
+  </parent>
+  <artifactId>uservice-webapi-base</artifactId>
+  <version>${revision}</version>
+  <packaging>pom</packaging>
+
+  <dependencyManagement>
+    <dependencies>
+
+      <dependency>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-webapi-gql</artifactId>
+        <version>${revision}</version>
+        <scope>test</scope>
+      </dependency>
+
+
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-bom</artifactId>
+        <version>7.11.2</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-projects.rpc</artifactId>
+        <version>${api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>onlexnet.sinnet</groupId>
+        <artifactId>uservice-timeentries.rpc</artifactId>
+        <version>${api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <scope>provided</scope>
+        <version>1.18.26</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
