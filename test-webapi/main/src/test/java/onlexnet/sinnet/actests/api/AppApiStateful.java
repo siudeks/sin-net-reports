@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import io.cucumber.java.PendingException;
 import lombok.val;
@@ -13,6 +14,7 @@ import lombok.experimental.Delegate;
 import onlexnet.sinnet.actests.api.AppApiMutation.ProjectId;
 import onlexnet.sinnet.actests.api.AppApiMutation.SaveProjectResult;
 import onlexnet.sinnet.actests.api.SessionState.ProjectModel;
+import onlexnet.sinnet.webapi.test.AppQuery;
 import onlexnet.sinnet.webapi.test.Jwt;
 
 /**
@@ -22,23 +24,19 @@ import onlexnet.sinnet.webapi.test.Jwt;
 public class AppApiStateful {
 
   @Delegate(types = AppApiQuery.class)
-  private final AppApi appApi;
+  private final AppQuery appApi;
   private final SessionState state;
+
+  @Value("${sinnetapp.host}")
+  String sinnetappHost;
 
   public AppApiStateful(SessionState state) {
     appApi = createAppApi(state.getUserEmail());
     this.state = state;
   }
 
-  static AppApi createAppApi(String userEmail) {
-    // var randomUsername = UUID.randomUUID().toString();
-    // var builder = Jwt.createTestJwt(randomUsername + "@email.com");
-    // var bearer = String.format("Bearer %s", token);
-    // // return TypesafeGraphQLClientBuilder.newBuilder()
-    // //     .header("Authorization", bearer)
-    // //     .build(AppApi.class);
-    // return null;
-    throw new PendingException();
+  AppQuery createAppApi(String userEmail) {
+    return new AppQuery(sinnetappHost, userEmail);
   }
 
   public SaveProjectResult createProject(String projectAlias) {
@@ -49,7 +47,7 @@ public class AppApiStateful {
     // var id = result.save;
     // state.on(new ProjectCreated(id, projectAlias));
     // return result;
-    return null;
+    throw new PendingException();
   }
 
   public void removeProject(ProjectId projectId) {

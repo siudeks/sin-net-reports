@@ -52,33 +52,17 @@
 
     <dependency>
       <groupId>onlexnet.sinnet</groupId>
-      <artifactId>uservice-projects.rpc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>onlexnet.sinnet</groupId>
       <artifactId>uservice-timeentries.rpc</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-configuration-processor</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.graphql</groupId>
       <artifactId>spring-graphql-test</artifactId>
     </dependency>
-    <!-- Also add this, unless "spring-boot-starter-webflux" is also present to test Subscriptions
-    with GraphQL -->
+    <!-- Also add this, unless "spring-boot-starter-webflux" is also present to test Subscriptions with GraphQL -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webflux</artifactId>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -96,27 +80,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
-      <exclusions>
-        <!--
-          [ERROR] One or more dependencies were identified with vulnerabilities that have a CVSS score
-        greater than or equal to '8.0':
-          [ERROR]
-          [ERROR] snakeyaml-1.33.jar: CVE-2022-1471(9.8)
-          [ERROR] uservice-projects.rpc-0.1.1-SNAPSHOT.jar: CVE-2017-8359(9.8), CVE-2020-7768(9.8),
-        CVE-2017-7861(9.8), CVE-2017-9431(9.8), CVE-2017-7860(9.8)
-          [ERROR]
-          [ERROR] See the dependency-check report for more details.
-        -->
-        <exclusion>
-          <groupId>org.yaml</groupId>
-          <artifactId>snakeyaml</artifactId>
-        </exclusion>
-      </exclusions>
-
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -132,23 +95,6 @@
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-    <dependency>
-      <!-- https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html -->
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
     </dependency>
 
     <dependency>

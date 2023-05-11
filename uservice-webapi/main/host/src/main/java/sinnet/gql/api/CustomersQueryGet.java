@@ -4,7 +4,6 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import sinnet.gql.models.CustomerEntity;
 import sinnet.grpc.CustomersGrpcService;
 import sinnet.grpc.common.EntityId;

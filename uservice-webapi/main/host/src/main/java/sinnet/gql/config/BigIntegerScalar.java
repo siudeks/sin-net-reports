@@ -1,7 +1,6 @@
 package sinnet.gql.config;
 
 import java.math.BigInteger;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import graphql.language.StringValue;

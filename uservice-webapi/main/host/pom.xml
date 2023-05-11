@@ -173,6 +173,12 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- without junt4 I have red cucumber test in VSCode -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

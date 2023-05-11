@@ -3,14 +3,12 @@ package sinnet.gql.security;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
 import sinnet.grpc.common.UserToken;
 import sinnet.grpc.roles.GetRequest;
 import sinnet.grpc.roles.RbacGrpc.RbacBlockingStub;
 import sinnet.web.B2CauthenticationToken;
 
 @Component
-@Slf4j
 class AccessProviderJwt implements AccessProvider {
 
   private RbacBlockingStub service;

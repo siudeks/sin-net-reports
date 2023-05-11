@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 
 import io.vavr.collection.Array;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import sinnet.gql.models.CustomerContactInput;
 import sinnet.gql.models.CustomerInput;
 import sinnet.gql.models.CustomerSecretExInput;

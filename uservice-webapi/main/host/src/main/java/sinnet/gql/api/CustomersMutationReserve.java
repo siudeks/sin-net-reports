@@ -3,7 +3,6 @@ package sinnet.gql.api;
 import org.springframework.stereotype.Controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import sinnet.gql.models.EntityGql;
 import sinnet.grpc.CustomersGrpcService;
 import sinnet.grpc.customers.ReserveRequest;

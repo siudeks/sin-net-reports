@@ -12,6 +12,7 @@
             "projectName": "uservice-webapi-host",
             "env": {
                 "DAPR_GRPC_PORT": 11019,
+                "SPRING_PROFILES_ACTIVE": "dev"
             },
             "vmArgs": "-Drevision=0.0.0-LOCAL",
             "preLaunchTask": "dapr-debug",

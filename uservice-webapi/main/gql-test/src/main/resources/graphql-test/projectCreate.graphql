@@ -1,0 +1,12 @@
+mutation createProject($name: String!) {
+  Projects {
+    save(name: $name) {
+      entity {
+        entityId
+        entityVersion
+        projectId
+      }
+      name
+    }
+  }
+}

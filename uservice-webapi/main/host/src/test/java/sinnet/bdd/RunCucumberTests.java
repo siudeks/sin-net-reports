@@ -1,4 +1,4 @@
-package bdd;
+package sinnet.bdd;
 
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;

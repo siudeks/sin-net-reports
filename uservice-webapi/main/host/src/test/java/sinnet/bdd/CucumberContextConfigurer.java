@@ -1,17 +1,15 @@
-package bdd;
+package sinnet.bdd;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import io.cucumber.spring.CucumberContextConfiguration;
-import onlexnet.sinnet.webapi.test.AppQuery;
 import sinnet.Profiles;
 import sinnet.Program;
 
 @CucumberContextConfiguration
-@ContextConfiguration(classes = { Program.class, PortsConfigurer.class, AppQuery.class })
 @ActiveProfiles(Profiles.TEST)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"DAPR_GRPC_PORT=0"})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+    "DAPR_GRPC_PORT=0" }, classes = { Program.class, PortsConfigurer.class })
 public class CucumberContextConfigurer {
 }

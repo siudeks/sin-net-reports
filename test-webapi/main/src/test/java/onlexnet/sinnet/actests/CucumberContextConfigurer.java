@@ -7,7 +7,7 @@ import io.cucumber.spring.CucumberContextConfiguration;
 import onlexnet.sinnet.webapi.test.AppQuery;
 
 @CucumberContextConfiguration
-@ContextConfiguration(classes = { AppQuery.class, ContextConfigurer.class })
+@ContextConfiguration(classes = { ContextConfigurer.class })
 @ComponentScan("onlexnet.sinnet.actests.steps")
 public class CucumberContextConfigurer {
 }

@@ -19,7 +19,7 @@ spec:
         dapr.io/enabled: "true"
         dapr.io/config: "tracing"
         dapr.io/app-id: "uservice-timeentries"
-        dapr.io/app-port: "9091"
+        # dapr.io/app-port: ... not required as port is discovered by DAPR thanks to APP_PORT env variable below
         dapr.io/app-protocol: "grpc"
     
     spec:
@@ -37,7 +37,7 @@ spec:
               #!/bin/bash
               echo "Download OTEL lib"
               # -L used to avoid downloading file with size 0
-              curl -L -o /pod-data/opentelemetry-javaagent.jar https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.25.1/opentelemetry-javaagent.jar
+              curl -L -o /pod-data/opentelemetry-javaagent.jar https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.26.0/opentelemetry-javaagent.jar
           volumeMounts:
           - name: data-volume
             mountPath: /pod-data
