@@ -63,6 +63,8 @@ spec:
             value: http://onlexnet-infra-opentelemetry-collector.onlexnet-infra.svc.cluster.local:4317
           - name: OTEL_EXPORTER_OTLP_PROTOCOL
             value: grpc
+          - name: INGRESS_HOST
+            value: {{ include "ingress.host" . }}
           volumeMounts:
           - name: data-volume
             mountPath: /pod-data
