@@ -55,8 +55,8 @@ spec:
           # OTEL
           # https://opentelemetry.io/docs/instrumentation/java/automatic/#setup
           # https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/
-          - name: JAVA_TOOL_OPTIONS
-            value: "-javaagent:/pod-data/opentelemetry-javaagent.jar"
+          # - name: JAVA_TOOL_OPTIONS
+          #   value: "-javaagent:/pod-data/opentelemetry-javaagent.jar"
           - name: OTEL_SERVICE_NAME
             value: "uservice-webapi"
           - name: OTEL_EXPORTER_OTLP_ENDPOINT

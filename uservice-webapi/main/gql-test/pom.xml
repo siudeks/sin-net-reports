@@ -59,7 +59,8 @@
       <groupId>org.springframework.graphql</groupId>
       <artifactId>spring-graphql-test</artifactId>
     </dependency>
-    <!-- Also add this, unless "spring-boot-starter-webflux" is also present to test Subscriptions with GraphQL -->
+    <!-- Also add this, unless "spring-boot-starter-webflux" is also present to test Subscriptions
+    with GraphQL -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webflux</artifactId>
@@ -123,6 +124,14 @@
   <build>
 
     <plugins>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>

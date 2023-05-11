@@ -19,6 +19,28 @@ helm pull nginx-stable/nginx-ingress
 - More: https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector
 
 
+## Upgrade DAPR
+Current version: 1.10.6
+
+- on dev machine
+```bash
+# instal ldapr components in local docker to test without kubernetes
+dapr uninstall
+dapr init --runtime-version 1.10.6
+
+# save updated dapr chart as dependency
+cd charts
+helm pull dapr/dapr --version=1.10.6
+
+```
+
+View of DAPR related settings in working minikube:
+- general way: dashboard may be reached using: minikube service dapr-dashboard --url -n onlexnet-infra
+- minikube way: allows retrieving the dashboard url by running the command "minikube service list"
+# more: https://github.com/dapr/dapr/blob/master/charts/dapr/README.md#example-of-installing-dapr-on-minikube
+#       https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-dapr-from-an-official-dapr-helm-chart
+
+
 ## Optionally: upgrade Dapr Helm chart.
 helm repo add dapr https://dapr.github.io/helm-charts/
 helm repo update
@@ -56,3 +78,11 @@ and then http://localhost:16686
 
 # view dapr dashboard
 minikube service dapr-dashboard --url -n onlexnet-infra
+
+## Used artlcles
+- https://www.aspecto.io/blog/distributed-tracing-with-opentelemetry-collector-on-kubernetes/
+- https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#add-and-install-dapr-helm-chart
+- https://cert-manager.io/docs/installation/helm/
+- https://cert-manager.io/docs/configuration/acme/#creating-a-basic-acme-issuer
+- https://github.com/jetstack/cert-manager/issues/1387
+

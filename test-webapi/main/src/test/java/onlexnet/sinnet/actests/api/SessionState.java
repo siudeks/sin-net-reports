@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
-import onlexnet.sinnet.actests.api.AppApiMutation.ProjectEntity;
 import onlexnet.sinnet.actests.api.AppApiMutation.ProjectId;
+import sinnet.gql.models.ProjectEntityGql;
 
 @RequiredArgsConstructor
 public class SessionState {
@@ -29,7 +29,7 @@ public class SessionState {
     void on(ProjectRemoved event) {
         var existing = createdProjects
             .stream()
-            .filter(it -> it.entity.getEntity().entityId.equals(event.entity().getId())).findFirst();
+            .filter(it -> it.entity.getEntity().getEntityId().equals(event.entity().getId())).findFirst();
         existing.ifPresent(createdProjects::remove);
     }
 
@@ -47,12 +47,12 @@ public class SessionState {
             .findFirst();
     }
 
-    public static record ProjectModel(ProjectEntity entity, String alias) { }
+    public static record ProjectModel(ProjectEntityGql entity, String alias) { }
 }
 
 sealed interface AppEvent { }
 
-record ProjectCreated (ProjectEntity entity, String projectAlias) implements AppEvent { }
+record ProjectCreated (ProjectEntityGql entity, String projectAlias) implements AppEvent { }
 record ProjectRemoved (ProjectId entity) implements AppEvent { }
 record TimeentryCreated () implements AppEvent { }
 record OperatorAssigned () implements AppEvent { }

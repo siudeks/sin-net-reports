@@ -16,6 +16,7 @@ import onlexnet.sinnet.actests.api.AppApiMutation.SaveProjectResult;
 import onlexnet.sinnet.actests.api.SessionState.ProjectModel;
 import onlexnet.sinnet.webapi.test.AppQuery;
 import onlexnet.sinnet.webapi.test.Jwt;
+import sinnet.gql.models.ProjectEntityGql;
 
 /**
  * Exposes read operations, and controls write operations with result of context
@@ -39,15 +40,14 @@ public class AppApiStateful {
     return new AppQuery(sinnetappHost, userEmail);
   }
 
-  public SaveProjectResult createProject(String projectAlias) {
+  public ProjectEntityGql createProject(String projectAlias) {
     val randomSuffix = RandomStringUtils.randomAlphabetic(6);
     var projectUniqueName = String.format("%s [%s]", projectAlias, randomSuffix);
 
-    // var result = appApi.saveProject(projectUniqueName);
-    // var id = result.save;
-    // state.on(new ProjectCreated(id, projectAlias));
-    // return result;
-    throw new PendingException();
+    var result = appApi.createProject(projectUniqueName);
+    var model = result.get();
+    state.on(new ProjectCreated(model, projectAlias));
+    return model;
   }
 
   public void removeProject(ProjectId projectId) {
