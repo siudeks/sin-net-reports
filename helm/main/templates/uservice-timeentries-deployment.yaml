@@ -19,7 +19,7 @@ spec:
         dapr.io/enabled: "true"
         dapr.io/config: "tracing"
         dapr.io/app-id: "uservice-timeentries"
-        # dapr.io/app-port: ... not required as port is discovered by DAPR thanks to APP_PORT env variable below
+        dapr.io/app-port: "9091"
         dapr.io/app-protocol: "grpc"
     
     spec:
