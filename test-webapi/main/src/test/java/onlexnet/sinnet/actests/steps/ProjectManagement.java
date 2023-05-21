@@ -1,23 +1,32 @@
 package onlexnet.sinnet.actests.steps;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import jakarta.annotation.PostConstruct;
 import onlexnet.sinnet.actests.support.Sessions;
 import onlexnet.sinnet.actests.support.UserEmail;
 
 public class ProjectManagement {
 
-  @Autowired
-  AzureAD azureAd;
+  // @Autowired
+  // AzureAD azureAd;
 
-  @Autowired
-  UserLoginProps userLoginProps;
+  // @Autowired
+  // UserLoginProps userLoginProps;
 
-  private Sessions session = new Sessions();
+  @Value("${sinnetapp.host}")
+  String sinnetappHost;
+
+  private Sessions session;
+
+  @PostConstruct
+  void init() {
+    session = new Sessions(sinnetappHost);
+  }
 
   @Given("a person named {userName}")
   public void a_person_named_user2(UserEmail email) {
@@ -38,7 +47,8 @@ public class ProjectManagement {
     // var project = ctx.state.getLastCreatedProject();
     // var expectedName = project.entity().getName();
     // var projects = ctx.appApi.projectList(expectedName);
-    // assertThat(projects.getList().stream().map(it -> it.getName())).contains(expectedName);
+    // assertThat(projects.getList().stream().map(it ->
+    // it.getName())).contains(expectedName);
     throw new PendingException();
   }
 
@@ -53,7 +63,8 @@ public class ProjectManagement {
   public void user_deletes_lastly_create_project(UserEmail email) {
     // var ctx = session.tryGet(email);
     // var id = ctx.state.getLastCreatedProject();
-    // var projectId = new AppApi.ProjectId(id.entity().getEntity().getEntityId(), 0);
+    // var projectId = new AppApi.ProjectId(id.entity().getEntity().getEntityId(),
+    // 0);
     // ctx.appApi.removeProject(projectId);
     throw new PendingException();
   }

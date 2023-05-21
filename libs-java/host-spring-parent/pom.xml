@@ -9,7 +9,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <spring-boot.version>3.0.6</spring-boot.version>
+    <spring-boot.version>3.1.0</spring-boot.version>
   </properties>
 
   <build>

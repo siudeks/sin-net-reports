@@ -50,7 +50,7 @@ spec:
           env:
           
           - name: SPRING_PROFILES_ACTIVE
-            value: "prod"
+            value: {{ include "ENV_SPRING_PROFILES_ACTIVE" . }}
 
           # OTEL
           # https://opentelemetry.io/docs/instrumentation/java/automatic/#setup

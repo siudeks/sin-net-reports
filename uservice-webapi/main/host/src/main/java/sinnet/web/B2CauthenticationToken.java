@@ -18,10 +18,7 @@ public final class B2CauthenticationToken extends AbstractAuthenticationToken {
    * @param accountId fixme
    * @param email fixme
    */
-  B2CauthenticationToken(String accountId,
-                          String email,
-                          String name,
-                          boolean newUser) {
+  B2CauthenticationToken(String accountId, String email, String name, boolean newUser) {
     super(Collections.emptyList());
     this.email = email;
     this.setAuthenticated(true);

@@ -4,7 +4,7 @@
 		{
 			"label": "dapr-debug",
 			"type": "dapr",
-			"appId": "projects",
+			"appId": "uservice-webapi",
 			"appPort": 11031,
 			"grpcPort": 11039,
 			"appProtocol": "grpc",
@@ -13,7 +13,7 @@
 		{
 			"label": "dapr-down",
 			"type": "daprd-down",
-			"appId": "projects",
+			"appId": "uservice-webapi",
 		}
 	]
 }

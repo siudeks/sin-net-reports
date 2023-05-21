@@ -1,17 +1,25 @@
 package onlexnet.sinnet.actests.support;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import io.vavr.collection.HashMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import onlexnet.sinnet.actests.api.AppApiStateful;
 import onlexnet.sinnet.actests.api.SessionState;
 
+@RequiredArgsConstructor
 public final class Sessions {
 
   /** Context of the user, wh lastly did some external operation. You may recognise such user as they are mentioned (...) as [username] (...)  */
   @Getter
   private UserContext activeUser = null;
+
+
+  private final String sinnetappHost;
 
   private HashMap<UserEmail, UserContext> users = HashMap.empty();
 
@@ -19,7 +27,7 @@ public final class Sessions {
 
   public void given(UserEmail userEmail) {
     var state = new SessionState(userEmail.getEmail());
-    var statefulAppApi = new AppApiStateful(state);
+    var statefulAppApi = new AppApiStateful(sinnetappHost, state);
     var active = new UserContext(state, statefulAppApi);
     users = users.put(userEmail, active);
     activeUser = active;

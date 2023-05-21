@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-@Component
 @Data
 @Accessors(fluent = true, chain = true)
 public class UserLoginProps {

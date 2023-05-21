@@ -8,7 +8,7 @@ import sinnet.Profiles;
 import sinnet.Program;
 
 @CucumberContextConfiguration
-@ActiveProfiles(Profiles.TEST)
+@ActiveProfiles({Profiles.App.TEST, Profiles.Jwt.Local})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
     "DAPR_GRPC_PORT=0" }, classes = { Program.class, PortsConfigurer.class })
 public class CucumberContextConfigurer {

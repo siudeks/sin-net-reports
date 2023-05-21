@@ -1,16 +1,27 @@
 package onlexnet.sinnet.actests.steps;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import jakarta.annotation.PostConstruct;
 import onlexnet.sinnet.actests.support.Project;
 import onlexnet.sinnet.actests.support.Sessions;
 import onlexnet.sinnet.actests.support.UserEmail;
 
 public final class TimesheetsOperations {
 
-  private Sessions sessions = new Sessions();
+  @Value("${sinnetapp.host}")
+  String sinnetappHost;
+
+  private Sessions sessions;
+
+  @PostConstruct
+  void init() {
+    sessions = new Sessions(sinnetappHost);
+  }
 
   @Given("a project called {projectName} created by {userName}")
   public void a_project_called_term1_created_by_term2(Project project, UserEmail owner) {

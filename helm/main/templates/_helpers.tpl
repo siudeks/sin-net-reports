@@ -16,6 +16,17 @@ sinnet.local
 {{- end -}}
 {{- end }}
 
+{{- define "ENV_SPRING_PROFILES_ACTIVE" -}}
+{{- $parts := split "-" .Release.Namespace -}}
+{{- $envName := $parts._2 -}}
+{{- if ne $envName "local" -}}
+prod,issuerB2C
+{{- else -}}
+prod,issuerLocal
+{{- end -}}
+{{- end }}
+
+
 {{- define "letsencrypt.instance" -}}
 {{- $parts := split "-" .Release.Namespace -}}
 {{- $envName := $parts._2 -}}

@@ -1,16 +1,8 @@
 # SinNet Reports
 
-| Pipeline | Status |
-|----------|--------|
-| WebApp | [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-webapp?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=2&branchName=master) |
-| WebApi | [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-webapi?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=4&branchName=master) |
-| Customers | [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-customers?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=11&branchName=master) |
-| Helm | [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-helm?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=12&branchName=master) |
-| Deploy| [![Build Status](https://dev.azure.com/onlexnet/sinnet/_apis/build/status/onlex-sinnet-deploy?branchName=master)](https://dev.azure.com/onlexnet/sinnet/_build/latest?definitionId=15&branchName=master) |
-
 ## Goal
 - Small project created for [Sin.Net](http://www.sin.net.pl/)
-- My testing sandbox to use any technology to improve my tech skills
+- My testing sandbox to use modern technlogies
 
 ## Business
 Project allows register service actions provided for some customers, and produce summarized reports in form of small PDF attachments for invoices..

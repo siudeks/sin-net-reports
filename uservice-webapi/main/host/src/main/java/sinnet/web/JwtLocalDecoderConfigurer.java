@@ -1,15 +1,32 @@
 package sinnet.web;
 
+import java.text.ParseException;
+
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.boot.autoconfigure.condition.AnyNestedCondition;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.proc.BadJOSEException;
+import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jwt.EncryptedJWT;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.JWTParser;
+import com.nimbusds.jwt.PlainJWT;
+import com.nimbusds.jwt.SignedJWT;
+import com.nimbusds.jwt.proc.JWTProcessor;
+
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import sinnet.Profiles;
 
 // For dev and local environment we need to add two extrac accounts to test some scenarios
 // we need extrac env variable available after deployment
@@ -27,37 +44,53 @@ class JwtLocalDecoderConfigurer {
    * Inspired by https://www.baeldung.com/spring-security-oauth-jwt
    */
   @Bean
-  @Conditional(OnLocalEnvironment.class)
-  public JwtDecoder jwtDecoder(OAuth2ResourceServerProperties properties) {
+  @Profile(Profiles.Jwt.Local)
+  public JwtDecoder jwtDecoder(OAuth2ResourceServerProperties maybeUsedInTheFutureCurrentlyIgnored) {
+
+    var jwtProcessor =  new UnsafeJwtProcessor();
+    var decoder = new NimbusJwtDecoder(jwtProcessor);
 
     return token -> {
-      var secret = "my super secret key to sign my dev JWT token";
-      var originalKey = new SecretKeySpec(secret.getBytes(), "HS256");
-      var decoder = NimbusJwtDecoder
-          .withSecretKey(originalKey)
-          .build();
       var jwt = decoder.decode(token);
       return jwt;
     };
   }
 
+  /**
+   * Compatible with Nimbus processu used to just parse JWT tokens, ignoring any validation.
+   * Designed only for tests purposes.
+   */
+  static class UnsafeJwtProcessor implements JWTProcessor<SecurityContext> {
 
-  // we have 3 cases where we would like to accept any tokens:
-  static class OnLocalEnvironment extends AnyNestedCondition {
-
-    public OnLocalEnvironment() {
-      super(ConfigurationPhase.REGISTER_BEAN);
+    @Override
+    @SneakyThrows
+    public JWTClaimsSet process(String jwtString, SecurityContext context) {
+      return JWTParser.parse(jwtString).getJWTClaimsSet();
     }
-  
-    @ConditionalOnProperty(value = "INGRESS_HOST", havingValue = "test")
-    static class OnTestEnv {}
-  
-    @ConditionalOnProperty(value = "INGRESS_HOST", havingValue = "localhost")
-    static class OnLocalEnv {}
-  
-    @ConditionalOnProperty(value = "INGRESS_HOST", havingValue = "sinnet.local")
-    static class OnSinnetLocalEnv {}
-  }
-  
-}
 
+    @Override
+    @SneakyThrows
+    public JWTClaimsSet process(JWT jwt, SecurityContext context) {
+      return jwt.getJWTClaimsSet();
+    }
+
+    @Override
+    @SneakyThrows
+    public JWTClaimsSet process(PlainJWT jwt, SecurityContext context) {
+      return jwt.getJWTClaimsSet();
+    }
+
+    @Override
+    @SneakyThrows
+    public JWTClaimsSet process(SignedJWT jwt, SecurityContext context) {
+      return jwt.getJWTClaimsSet();
+    }
+
+    @Override
+    @SneakyThrows
+    public JWTClaimsSet process(EncryptedJWT jwt, SecurityContext context) {
+      return jwt.getJWTClaimsSet();
+    }
+    
+  }
+}
