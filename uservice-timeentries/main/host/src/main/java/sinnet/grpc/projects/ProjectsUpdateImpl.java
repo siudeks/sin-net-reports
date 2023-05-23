@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import io.grpc.Status;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import sinnet.domain.access.AccessFacade;
 import sinnet.dbo.DboUpdate;
 import sinnet.grpc.projects.generated.UpdateCommand;
@@ -18,6 +19,7 @@ import sinnet.domain.model.ValProjectId;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class ProjectsUpdateImpl implements RpcCommandHandler<UpdateCommand, UpdateResult> {
   
   private final AccessFacade accessFacade;
@@ -30,6 +32,7 @@ class ProjectsUpdateImpl implements RpcCommandHandler<UpdateCommand, UpdateResul
     var idHolder = ValProjectId.of(eid);
 
     var requestor = cmd.getUserToken();
+    log.info("REQUESTOR: {}", requestor);
 
     accessFacade.guardAccess(requestor, idHolder, roleContext -> roleContext::canUpdateProject);
     return dboUpdate.update(cmd);

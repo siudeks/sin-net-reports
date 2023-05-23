@@ -41,9 +41,13 @@ class ProjectsGrpcFacadeImpl implements ProjectsGrpcFacade {
 
   @Override
   public ProjectId update(String requestorEmail, ProjectId id, String name, String ownerEmail, List<String> operatorEmail) {
+    var requestorToken = UserToken.newBuilder()
+        .setRequestorEmail(requestorEmail)
+        .build();
     var desired = ProjectModel.newBuilder()
         .setEmailOfOwner(requestorEmail);
     var updateRequest = UpdateCommand.newBuilder()
+        .setUserToken(requestorToken)
         .setEntityId(sinnet.grpc.projects.generated.ProjectId.newBuilder()
           .setEId(id.id())
           .setETag(id.tag()))
