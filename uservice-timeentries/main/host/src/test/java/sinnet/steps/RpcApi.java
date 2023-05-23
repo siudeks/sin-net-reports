@@ -1,4 +1,4 @@
-package sinnet.features;
+package sinnet.steps;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -11,6 +11,8 @@ import io.grpc.ManagedChannelBuilder;
 import lombok.Getter;
 import sinnet.AppOperations;
 import sinnet.grpc.projects.RpcFacade;
+import sinnet.grpc.projects.generated.ProjectsGrpc;
+import sinnet.grpc.projects.generated.ProjectsGrpc.ProjectsBlockingStub;
 import sinnet.grpc.timeentries.TimeEntriesGrpc;
 import sinnet.grpc.timeentries.TimeEntriesGrpc.TimeEntriesBlockingStub;
 import sinnet.grpc.users.UsersGrpc;
@@ -29,6 +31,9 @@ public class RpcApi implements ApplicationListener<ApplicationReadyEvent> {
   private TimeEntriesBlockingStub timeentries;
 
   @Getter
+  private ProjectsBlockingStub projects;
+
+  @Getter
   private AppCallbackBlockingStub apiCallback;
 
   AppOperations appOperations;
@@ -44,5 +49,6 @@ public class RpcApi implements ApplicationListener<ApplicationReadyEvent> {
     users = UsersGrpc.newBlockingStub(channel);
     timeentries = TimeEntriesGrpc.newBlockingStub(channel);
     apiCallback = AppCallbackGrpc.newBlockingStub(channel);
+    projects = ProjectsGrpc.newBlockingStub(channel);
   }
 }

@@ -29,13 +29,10 @@ Docker:
   # example: to build images to locally deploy to k8s
   # 1) Optionally change context to work on minikube images
   eval $(minikube docker-env)
-  # 2) to build image and push it to local k8s instance
-  mvnd -pl host -am clean install -DskipTests
+  # 2) build java packages
+  mvnd clean install -DskipTests # skip tests as current docker engine (changed by step no 1) is not default dev instance, but ised by minikube engine.
+  # 3) to build images and push it to local k8s instance
   mvnd jib:dockerBuild -pl host -Dimage=sinnet.azurecr.io/uservice-timeentries-host:latest
-  mvnd -pl initdb-host -am clean install -DskipTests
   mvnd jib:dockerBuild -pl initdb-host -Dimage=sinnet.azurecr.io/uservice-timeentries-initdb:latest
-
-  # example: build local tar file with image
-  mvn clean compile jib:buildTar -pl host
 ```
 

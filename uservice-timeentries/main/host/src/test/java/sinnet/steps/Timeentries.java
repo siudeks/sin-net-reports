@@ -1,7 +1,9 @@
-package sinnet.features;
+package sinnet.steps;
 
 import org.assertj.core.api.Assertions;
 
+import io.cucumber.java.Before;
+import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -9,21 +11,27 @@ import lombok.RequiredArgsConstructor;
 import sinnet.models.ValName;
 
 @RequiredArgsConstructor
-public class TimeentriesStepDefinitions {
+public class Timeentries {
 
   private final TestApi testApi;
+
   private ClientContext ctx;
 
-  @Given("a new project called {projectAlias}")
-  public void a_new_project_called(ValName projectAlias) {
+  @Before
+  public void initScenarion() {
     ctx = new ClientContext();
-    testApi.notifyNewProject(ctx, projectAlias);
+  }
+
+  @Given("a new project called {projectAlias} is created by {operatorAlias}")
+  public void a_new_project_called(ValName projectAlias, ValName operatorAlias) {
+    ctx.getOperatorId(operatorAlias, true);
+    testApi.createNewProject(ctx, projectAlias);
   }
 
   @Given("an operator called {operatorAlias} assigned to project called {projectAlias}")
   public void an_operator_called_alias1_assigned_toproject_called_alias2(ValName operatorAlias, ValName projectAlias) {
     ctx.getOperatorId(operatorAlias, true);
-    ctx.setProjectId(projectAlias);
+    ctx.setCurrentProject(projectAlias);
     testApi.assignOperator(ctx);
   }
 

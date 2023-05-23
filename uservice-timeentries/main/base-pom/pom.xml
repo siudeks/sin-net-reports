@@ -63,7 +63,7 @@
       <dependency>
         <groupId>io.dapr</groupId>
         <artifactId>dapr-sdk</artifactId>
-        <version>1.7.0</version>
+        <version>1.8.0</version>
       </dependency>
 
       <dependency>
@@ -100,6 +100,19 @@
         <groupId>io.vavr</groupId>
         <artifactId>vavr</artifactId>
         <version>0.10.4</version>
+      </dependency>
+
+    <!-- Added dependency to fix issue
+      Caused by: java.lang.NoSuchMethodError: 'reactor.core.publisher.Mono reactor.core.publisher.Mono.subscriberContext()'
+        at io.dapr.client.DaprClientGrpc.publishEvent(DaprClientGrpc.java:177)
+        at io.dapr.client.DaprClientProxy.publishEvent(DaprClientProxy.java:110) -->
+      <dependency>
+          <groupId>io.projectreactor</groupId>
+          <artifactId>reactor-bom</artifactId>
+          <!-- as per https://github.com/dapr/java-sdk/issues/815 -->
+          <version>2020.0.25</version>
+          <type>pom</type>
+          <scope>import</scope>
       </dependency>
 
     </dependencies>

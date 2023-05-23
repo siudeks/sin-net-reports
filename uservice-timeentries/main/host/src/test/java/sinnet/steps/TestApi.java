@@ -1,4 +1,4 @@
-package sinnet.features;
+package sinnet.steps;
 
 import static sinnet.grpc.timeentries.ReserveCommand.newBuilder;
 
@@ -9,9 +9,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.google.protobuf.ByteString;
-
-import io.dapr.v1.DaprAppCallbackProtos.TopicEventRequest;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +17,13 @@ import lombok.experimental.Accessors;
 import sinnet.events.AvroObjectSerializer;
 import sinnet.grpc.common.EntityId;
 import sinnet.grpc.common.UserToken;
+import sinnet.grpc.projects.generated.CreateRequest;
 import sinnet.grpc.timeentries.LocalDate;
 import sinnet.grpc.timeentries.SearchQuery;
 import sinnet.grpc.users.IncludeOperatorCommand;
 import sinnet.models.ProjectId;
 import sinnet.models.ValEmail;
 import sinnet.models.ValName;
-import sinnet.project.events.ProjectCreatedEvent;
 
 @RequiredArgsConstructor
 @Component
@@ -38,16 +35,16 @@ public class TestApi {
   private final AvroObjectSerializer objectSerializer = new AvroObjectSerializer();
 
   @SneakyThrows
-  void notifyNewProject(ClientContext ctx, ValName projectAlias) {
-    var projectId = ctx.setProjectId(projectAlias);
-    var event = ProjectCreatedEvent.newBuilder()
-        .setEid(projectId.getId().toString())
-        .setEtag(projectId.getVersion())
+  void createNewProject(ClientContext ctx, ValName projectAlias) {
+    var invoker = sinnet.grpc.projects.generated.UserToken.newBuilder()
+        .setRequestorEmail(ctx.currentOperator.getValue())
         .build();
-    var eventSerialized = objectSerializer.serialize(event);
-    var data = ByteString.copyFrom(eventSerialized);
-    var te = TopicEventRequest.newBuilder().setData(data).build();
-    rpcApi.getApiCallback().onTopicEvent(te);
+    var cmd = CreateRequest.newBuilder()
+        .setUserToken(invoker)
+        .build();
+    rpcApi.getProjects().create(cmd);
+
+    ctx.setCurrentProject(projectAlias);
   }
 
   void assignOperator(ClientContext ctx) {
@@ -106,7 +103,7 @@ class ClientContext {
   @Getter
   private final KnownFacts known = new KnownFacts();
 
-  public ProjectId setProjectId(@NonNull ValName projectAlias) {
+  public ProjectId setCurrentProject(@NonNull ValName projectAlias) {
     currentProject = projectAlias;
     var projectId = ProjectId.anyNew();
     known.projects().put(projectAlias, projectId);

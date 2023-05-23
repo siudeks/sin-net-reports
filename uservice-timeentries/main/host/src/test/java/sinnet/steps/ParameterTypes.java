@@ -1,4 +1,4 @@
-package sinnet.features;
+package sinnet.steps;
 
 import io.cucumber.java.ParameterType;
 import sinnet.models.ValName;

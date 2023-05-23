@@ -3,6 +3,7 @@
         "vscjava.vscode-java-pack",
         "pivotal.vscode-boot-dev-pack",
         "ms-azuretools.vscode-dapr",
-        "tomoki1207.pdf"
+        "tomoki1207.pdf",
+        "cucumberopen.cucumber-official"
     ]
 }
