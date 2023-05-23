@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.assertj.core.api.Assertions;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
@@ -18,6 +19,8 @@ import sinnet.events.AvroObjectSerializer;
 import sinnet.grpc.common.EntityId;
 import sinnet.grpc.common.UserToken;
 import sinnet.grpc.projects.generated.CreateRequest;
+import sinnet.grpc.projects.generated.ProjectIdOrBuilder;
+import sinnet.grpc.projects.generated.UpdateCommand;
 import sinnet.grpc.timeentries.LocalDate;
 import sinnet.grpc.timeentries.SearchQuery;
 import sinnet.grpc.users.IncludeOperatorCommand;
@@ -31,9 +34,6 @@ public class TestApi {
 
   private final RpcApi rpcApi;
 
-  // we use the same deserializer as the whole ecosystem in ser / deser events.
-  private final AvroObjectSerializer objectSerializer = new AvroObjectSerializer();
-
   @SneakyThrows
   void createNewProject(ClientContext ctx, ValName projectAlias) {
     var invoker = sinnet.grpc.projects.generated.UserToken.newBuilder()
@@ -42,12 +42,29 @@ public class TestApi {
     var cmd = CreateRequest.newBuilder()
         .setUserToken(invoker)
         .build();
-    rpcApi.getProjects().create(cmd);
+    var reply = rpcApi.getProjects().create(cmd);
+    var projectId = ProjectId.of(reply.getEntityId().getEId(), reply.getEntityId().getETag());
 
-    ctx.setCurrentProject(projectAlias);
+    ctx.setCurrentProject(projectAlias, projectId);
   }
 
-  void assignOperator(ClientContext ctx) {
+  @SneakyThrows
+  void updateProject(ClientContext ctx, ValName projectAlias, String newName) {
+    var userToken = toGrpc(ctx.currentOperator);
+    var projectIdAsProto = toGrpc(ctx.getProjectId(projectAlias));
+    var cmd = UpdateCommand.newBuilder()
+        .setUserToken(userToken)
+        .setEntityId(projectIdAsProto)
+        .build();
+
+    var result = rpcApi.getProjects().update(cmd);
+    Assertions.assertThat(result.getEntityId().getETag()).isGreaterThan(0);
+
+    var projectId = ProjectId.of(result.getEntityId().getEId(), result.getEntityId().getETag());
+    ctx.setCurrentProject(projectAlias, projectId);
+  }
+
+  void addOperator(ClientContext ctx) {
     var projectAlias = ctx.currentProject();
     var operatorAlias = ctx.currentOperator();
     var projectId = ctx.getProjectId(projectAlias);
@@ -86,8 +103,22 @@ public class TestApi {
     return result.getActivitiesList().stream().map(it -> it.getEntityId()).toList();
   }
 
+  static sinnet.grpc.projects.generated.ProjectId toGrpc(ProjectId projectId) {
+    return sinnet.grpc.projects.generated.ProjectId.newBuilder()
+      .setEId(projectId.getId())
+      .setETag(projectId.getVersion())
+      .build();
+  }
+
+  static sinnet.grpc.projects.generated.UserToken toGrpc(ValName currentOperator) {
+    return sinnet.grpc.projects.generated.UserToken.newBuilder()
+      .setRequestorEmail(currentOperator.getValue())
+      .build();
+  }
+
 }
 
+/** Represents single endpoin connection, where someone logegd in and will be the same till the end of the session. */
 @Accessors(fluent = true)
 class ClientContext {
   @Getter
@@ -103,11 +134,13 @@ class ClientContext {
   @Getter
   private final KnownFacts known = new KnownFacts();
 
-  public ProjectId setCurrentProject(@NonNull ValName projectAlias) {
+  public void setCurrentProject(@NonNull ValName projectAlias, ProjectId projectId) {
     currentProject = projectAlias;
-    var projectId = ProjectId.anyNew();
     known.projects().put(projectAlias, projectId);
-    return known.projects().get(projectAlias);
+  }
+
+  public void useCurrentProject(@NonNull ValName projectAlias) {
+    currentProject = projectAlias;
   }
 
   public void newTimeentry(EntityId id, LocalDate when) {

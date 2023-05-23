@@ -31,8 +31,8 @@ public class Timeentries {
   @Given("an operator called {operatorAlias} assigned to project called {projectAlias}")
   public void an_operator_called_alias1_assigned_toproject_called_alias2(ValName operatorAlias, ValName projectAlias) {
     ctx.getOperatorId(operatorAlias, true);
-    ctx.setCurrentProject(projectAlias);
-    testApi.assignOperator(ctx);
+    ctx.useCurrentProject(projectAlias);
+    testApi.addOperator(ctx);
   }
 
   @When("the operator creates new timeentry")

@@ -9,14 +9,14 @@ import lombok.Value;
 @Value
 public class ProjectId {
 
-  private UUID id;
-  private int version;
+  private String id;
+  private long version;
 
-  public static ProjectId of(UUID id, int version) {
+  public static ProjectId of(String id, long version) {
     return new ProjectId(id, version);
   }
 
   public static ProjectId anyNew() {
-    return new ProjectId(UUID.randomUUID(), 0);
+    return new ProjectId(UUID.randomUUID().toString(), 0);
   }
 }

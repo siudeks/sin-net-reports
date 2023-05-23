@@ -30,7 +30,4 @@ public class ShardedId {
     return new ShardedId(projectId, UUID.randomUUID(), 0);
   }
 
-  public static ShardedId anyNew(ProjectId projectId) {
-    return anyNew(projectId.getId());
-  }
 }

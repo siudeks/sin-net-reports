@@ -36,8 +36,6 @@ class DaprCallbacks extends AppCallbackGrpc.AppCallbackImplBase {
   public void onTopicEvent(TopicEventRequest request, StreamObserver<TopicEventResponse> responseObserver) {
     var data = request.getData().toByteArray();
     var eventType = TypeRef.get(ProjectCreatedEvent.class);
-    var s1 = "Sawek";
-    var s = new String(data);
     var event = objectSerializer.deserialize(data, eventType);
     var eidAsString = event.getEid().toString();
     var eid = UUID.fromString(eidAsString);
