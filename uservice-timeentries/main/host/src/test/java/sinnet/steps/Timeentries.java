@@ -40,11 +40,6 @@ public class Timeentries {
     testApi.createEntry(ctx);
   }
 
-  @Then("operation succeeded")
-  public void operation_succeeded() {
-    // noe checks yet
-  }
-
   @Then("the new timeentry is visible on the {projectAlias}")
   public void the_new_timeentry_is_visible_on_the_projectAlias(ValName projectAlias) {
     var latestTimeentryId = ctx.latestTimeentryId();

@@ -6,5 +6,4 @@ Feature: Manage Timeentries
 
   Scenario: Create a new Timeentry
     When the operator creates new timeentry
-    Then operation succeeded
     And the new timeentry is visible on the project1
