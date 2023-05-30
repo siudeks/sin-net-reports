@@ -35,10 +35,9 @@ public class ProjectManagement {
 
   @Then("Number of projects is {int}")
   public void number_of_projects_is(int numberOfProjects) {
-    // var ctx = session.getActiveUser();
-    // var actual = ctx.appApi.projectsCount().getNumberOfProjects();
-    // assertThat(actual).isEqualTo(numberOfProjects);
-    throw new PendingException();
+    var ctx = session.getActiveUser();
+    var actual = ctx.appApi.projectsCount().getNumberOfProjects();
+    assertThat(actual).isEqualTo(numberOfProjects);
   }
 
   @Then("the project is visible on the list of projects")

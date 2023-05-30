@@ -25,7 +25,6 @@ public final class HostTestContextBootstrapper extends SpringBootTestContextBoot
 
   public HostTestContextBootstrapper() {
     super();
-    log.error("SPARTA1");
   }
   
   @Override
@@ -45,7 +44,6 @@ public final class HostTestContextBootstrapper extends SpringBootTestContextBoot
     var testContext = super.buildTestContext();
     var appContext = (AbstractApplicationContext) testContext.getApplicationContext();
     appContext.addApplicationListener((ContextClosedEvent e) -> disposer.dispose());
-    log.error("SPARTA2");
     return testContext;
   }
 

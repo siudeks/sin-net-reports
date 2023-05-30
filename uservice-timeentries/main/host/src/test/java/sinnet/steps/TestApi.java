@@ -15,12 +15,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
-import sinnet.events.AvroObjectSerializer;
 import sinnet.grpc.common.EntityId;
 import sinnet.grpc.common.UserToken;
 import sinnet.grpc.projects.generated.CreateRequest;
-import sinnet.grpc.projects.generated.ProjectIdOrBuilder;
+import sinnet.grpc.projects.generated.ProjectModel;
 import sinnet.grpc.projects.generated.UpdateCommand;
+import sinnet.grpc.projects.generated.UserStatsRequest;
 import sinnet.grpc.timeentries.LocalDate;
 import sinnet.grpc.timeentries.SearchQuery;
 import sinnet.grpc.users.IncludeOperatorCommand;
@@ -52,9 +52,14 @@ public class TestApi {
   void updateProject(ClientContext ctx, ValName projectAlias, String newName) {
     var userToken = toGrpc(ctx.currentOperator);
     var projectIdAsProto = toGrpc(ctx.getProjectId(projectAlias));
+    var ownerAlias = ctx.currentOperator;
+    var ownerId = ctx.getOperatorId(ownerAlias, false);
     var cmd = UpdateCommand.newBuilder()
         .setUserToken(userToken)
         .setEntityId(projectIdAsProto)
+        .setDesired(ProjectModel.newBuilder()
+          .setName(newName)
+          .setEmailOfOwner(ownerId.getValue()))
         .build();
 
     var result = rpcApi.getProjects().update(cmd);
@@ -67,13 +72,23 @@ public class TestApi {
   void addOperator(ClientContext ctx) {
     var projectAlias = ctx.currentProject();
     var operatorAlias = ctx.currentOperator();
-    var projectId = ctx.getProjectId(projectAlias);
     var operatorId = ctx.getOperatorId(operatorAlias, false);
+    var projectId = ctx.getProjectId(projectAlias);
     var cmd = IncludeOperatorCommand.newBuilder()
         .setProjectId(projectId.getId().toString())
         .addOperatorEmail(operatorId.getValue())
         .build();
     rpcApi.getUsers().includeOperator(cmd);
+  }
+
+  int numberOfProjects(ClientContext ctx) {
+    var operatorAlias = ctx.currentOperator();
+    var operatorId = ctx.getOperatorId(operatorAlias, false);
+    var qry = UserStatsRequest.newBuilder()
+        .setEmailOfRequestor(operatorId.getValue())
+        .build();
+    var stats = rpcApi.getProjects().userStats(qry);
+    return stats.getNumberOfProjects();
   }
 
   void createEntry(ClientContext ctx) {

@@ -1,6 +1,7 @@
 package sinnet.steps;
 
-import java.util.UUID;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.assertj.core.api.Assertions;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
@@ -19,12 +20,12 @@ public class Projects {
   @Before
   public void initScenarion() {
     user = new ClientContext();
-    user.currentOperator = ValName.of("Operator [" + UUID.randomUUID() + "]");
+    user.currentOperator = ValName.of("Operator [" + RandomStringUtils.randomAlphabetic(4) + "]");
   }
 
   @When("user creates new project")
   public void a_new_project_called() {
-    val projectAlias = ValName.of("NewProject [" + UUID.randomUUID() + "]");
+    val projectAlias = ValName.of("NewProject [" + RandomStringUtils.randomAlphabetic(4) + "]");
     testApi.createNewProject(user, projectAlias);
   }
 
@@ -33,6 +34,12 @@ public class Projects {
     var currentProject = user.currentProject();
     var newName = currentProject.getValue() + "(2)";
     testApi.updateProject(user, currentProject, newName);
+  }
+
+  @Then("number of available projects is {int}")
+  public void number_of_available_projects_is_arg1(int expected) {
+    var numerOfProjects = testApi.numberOfProjects(user);
+    Assertions.assertThat(numerOfProjects).isEqualTo(expected);
   }
 
 }

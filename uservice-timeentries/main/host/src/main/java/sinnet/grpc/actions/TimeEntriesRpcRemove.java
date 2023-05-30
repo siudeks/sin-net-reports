@@ -3,7 +3,6 @@ package sinnet.grpc.actions;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import sinnet.grpc.mapping.RpcCommandHandler;
 import sinnet.grpc.timeentries.RemoveCommand;
 import sinnet.grpc.timeentries.RemoveResult;
