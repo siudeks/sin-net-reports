@@ -65,4 +65,12 @@ public class AppQuery {
         .entity(ProjectEntityGql.class);
   }
 
+  /** TBD. */
+  public Entity<Integer, ?> numberOfProjects() {
+    return tester.documentName("numberOfProjects")
+        .execute()
+        .path("Projects.numberOfProjects")
+        .entity(Integer.class);
+  }
+
 }

@@ -24,7 +24,8 @@ class ProjectsQueryList {
     return result;
   }
 
-  public Integer numberOfProjects(ProjectsQuery self) {
+  @SchemaMapping
+  Integer numberOfProjects(ProjectsQuery self) {
     var requestorEmail = self.getRequestorEmail();
     return service.userStats(requestorEmail).numberOfProjects();
   }

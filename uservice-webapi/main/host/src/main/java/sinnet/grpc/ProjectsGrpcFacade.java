@@ -18,7 +18,9 @@ public interface ProjectsGrpcFacade {
 
   StatsResult userStats(String requestorEmail);
 
-  /** TBD. */
+  /**
+   * Set of stats related to the current user. Scope of statis is defined by needs of getting info about the user.
+   */
   record StatsResult(int numberOfProjects) {
   }
 }

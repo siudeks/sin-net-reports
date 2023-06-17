@@ -1,26 +1,28 @@
 package sinnet.bdd;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 
-import org.assertj.core.api.Assertions;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.web.servlet.result.StatusResultMatchers;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import onlexnet.sinnet.webapi.test.AppQuery;
 import sinnet.domain.ProjectId;
-import sinnet.gql.mappers.ProjectsMapper;
 import sinnet.gql.models.ProjectEntityGql;
 import sinnet.gql.models.SomeEntityGql;
 import sinnet.grpc.ProjectsGrpcFacade;
+import sinnet.grpc.ProjectsGrpcFacade.StatsResult;
 
 public class ExampleSteps {
 
@@ -69,6 +71,7 @@ public class ExampleSteps {
 
   ProjectEntityGql expectedCreatedProject;
   ProjectEntityGql lastlyCreatedProject;
+  Integer expectedNumberOfProjects; 
 
   @When("a project is saved")
   public void project_is_saved() {
@@ -80,23 +83,45 @@ public class ExampleSteps {
         .thenReturn(projectId1);
     var projectId2 = new ProjectId("1", 2L);
     Mockito
-        .when(projectsGrpc.update(eq(requestorEmail), eq(projectId1), eq(projectName), eq(requestorEmail), eq(List.of())))
+        .when(
+            projectsGrpc.update(eq(requestorEmail), eq(projectId1), eq(projectName), eq(requestorEmail), eq(List.of())))
         .thenReturn(projectId2);
     var saveResult = appQuery.createProject(projectName);
 
     lastlyCreatedProject = saveResult.get();
     expectedCreatedProject = new ProjectEntityGql()
-      .setEntity(new SomeEntityGql()
-        .setEntityId("1")
-        .setEntityVersion(2L)
-        .setProjectId("1"))
-      .setName(projectName);
+        .setEntity(new SomeEntityGql()
+            .setEntityId("1")
+            .setEntityVersion(2L)
+            .setProjectId("1"))
+        .setName(projectName);
   }
 
   @Then("operation result is returned")
   public void operation_result_is_returned() {
-    Assertions
-      .assertThat(lastlyCreatedProject)
-      .isEqualTo(expectedCreatedProject);
+    assertThat(lastlyCreatedProject)
+        .isEqualTo(expectedCreatedProject);
   }
+
+  @When("userstats request is send to backend")
+  public void userstats_request_is_send_to_backend() {
+
+    expectedNumberOfProjects = new Random().nextInt();
+    Mockito
+      .when(projectsGrpc.userStats(requestorEmail))
+      .thenReturn(new StatsResult(expectedNumberOfProjects));
+  }
+
+  @Then("userstats are returned")
+  public void userstats_are_returned() {
+    var numberOfProjects = appQuery.numberOfProjects().get();
+
+    Mockito
+      .verify(projectsGrpc)
+      .userStats(requestorEmail);
+
+    assertThat(numberOfProjects)
+      .isEqualTo(expectedNumberOfProjects);
+  }
+
 }
