@@ -1,5 +1,7 @@
 package onlexnet.sinnet.actests.steps;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.springframework.beans.factory.annotation.Value;
 
 import io.cucumber.java.PendingException;
@@ -36,7 +38,7 @@ public class ProjectManagement {
   @Then("Number of projects is {int}")
   public void number_of_projects_is(int numberOfProjects) {
     var ctx = session.getActiveUser();
-    var actual = ctx.appApi.projectsCount().getNumberOfProjects();
+    var actual = ctx.appApi.getNumberOfProjects();
     assertThat(actual).isEqualTo(numberOfProjects);
   }
 

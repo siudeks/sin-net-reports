@@ -5,12 +5,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import lombok.val;
 import lombok.experimental.Delegate;
 import onlexnet.sinnet.actests.api.AppApiMutation.ProjectId;
-import onlexnet.sinnet.actests.api.SessionState.ProjectModel;
+import onlexnet.sinnet.actests.api.SessionExpectedState.ProjectModel;
 import onlexnet.sinnet.webapi.test.AppQuery;
 import sinnet.gql.models.ProjectEntityGql;
 
 /**
- * Exposes read operations, and controls write operations with result of context
+ * Exposes read operations, and controls write operations with cumulating result into state field.
  * os write operations.
  */
 public class AppApiStateful {
@@ -18,9 +18,9 @@ public class AppApiStateful {
   @Delegate(types = AppApiQuery.class)
   private final AppQuery appApi;
 
-  private final SessionState state;
+  private final SessionExpectedState state;
 
-  public AppApiStateful(String sinnetappHost, SessionState state) {
+  public AppApiStateful(String sinnetappHost, SessionExpectedState state) {
     appApi = createAppApi(sinnetappHost, state.getUserEmail());
     this.state = state;
   }
@@ -55,6 +55,10 @@ public class AppApiStateful {
     // var etag = projectId.entity().getEntity().entityVersion;
     // appApi.assignOperator(eid, etag, operatorEmail);
     // state.on(new OperatorAssigned());
+  }
+
+  public int getNumberOfProjects() {
+      return appApi.numberOfProjects().get();
   }
 
 }

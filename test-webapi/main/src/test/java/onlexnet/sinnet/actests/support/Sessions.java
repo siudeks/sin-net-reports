@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import onlexnet.sinnet.actests.api.AppApiStateful;
-import onlexnet.sinnet.actests.api.SessionState;
+import onlexnet.sinnet.actests.api.SessionExpectedState;
 
 @RequiredArgsConstructor
 public final class Sessions {
@@ -26,7 +26,7 @@ public final class Sessions {
   public UserContext active;
 
   public void given(UserEmail userEmail) {
-    var state = new SessionState(userEmail.getEmail());
+    var state = new SessionExpectedState(userEmail.getEmail());
     var statefulAppApi = new AppApiStateful(sinnetappHost, state);
     var active = new UserContext(state, statefulAppApi);
     users = users.put(userEmail, active);
@@ -57,7 +57,7 @@ public final class Sessions {
   @Data
   @AllArgsConstructor
   public static class UserContext {
-    public SessionState state;
+    public SessionExpectedState state;
     public AppApiStateful appApi;
   }
 

@@ -9,7 +9,7 @@ import onlexnet.sinnet.actests.api.AppApiMutation.ProjectId;
 import sinnet.gql.models.ProjectEntityGql;
 
 @RequiredArgsConstructor
-public class SessionState {
+public class SessionExpectedState {
     
     private final String userEmail;
     private final Collection<ProjectModel> createdProjects = new LinkedList<>();
