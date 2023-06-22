@@ -38,18 +38,18 @@ public class ProjectManagement {
   @Then("Number of projects is {int}")
   public void number_of_projects_is(int numberOfProjects) {
     var ctx = session.getActiveUser();
-    var actual = ctx.appApi.getNumberOfProjects();
+    var actual = ctx.appApi.numberOfProjects().get();
     assertThat(actual).isEqualTo(numberOfProjects);
   }
 
   @Then("the project is visible on the list of projects")
   public void the_project_is_visible_on_the_list_of_projects() {
-    // var ctx = session.getActiveUser();
-    // var project = ctx.state.getLastCreatedProject();
-    // var expectedName = project.entity().getName();
-    // var projects = ctx.appApi.projectList(expectedName);
-    // assertThat(projects.getList().stream().map(it ->
-    // it.getName())).contains(expectedName);
+    var ctx = session.getActiveUser();
+    var project = ctx.state.getLastCreatedProject();
+    var expectedName = project.entity().getName();
+    var projects = ctx.appApi.findProjectByName(expectedName).get().stream()
+        .map(it -> it.getName());
+    assertThat(projects).contains(expectedName);
     throw new PendingException();
   }
 

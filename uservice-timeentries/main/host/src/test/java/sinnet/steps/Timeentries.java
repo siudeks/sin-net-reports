@@ -24,15 +24,12 @@ public class Timeentries {
 
   @Given("a new project called {projectAlias} is created by {operatorAlias}")
   public void a_new_project_called(ValName projectAlias, ValName operatorAlias) {
-    ctx.getOperatorId(operatorAlias, true);
     testApi.createNewProject(ctx, projectAlias);
   }
 
   @Given("an operator called {operatorAlias} assigned to project called {projectAlias}")
   public void an_operator_called_alias1_assigned_toproject_called_alias2(ValName operatorAlias, ValName projectAlias) {
-    ctx.getOperatorId(operatorAlias, true);
-    ctx.useCurrentProject(projectAlias);
-    testApi.addOperator(ctx);
+    testApi.addOperator(ctx, operatorAlias, projectAlias);
   }
 
   @When("the operator creates new timeentry")
@@ -42,8 +39,9 @@ public class Timeentries {
 
   @Then("the new timeentry is visible on the {projectAlias}")
   public void the_new_timeentry_is_visible_on_the_projectAlias(ValName projectAlias) {
-    var latestTimeentryId = ctx.latestTimeentryId();
-    var timeentryCtx = ctx.known().timeentries().get(latestTimeentryId);
+    var facts = ctx.buildExpectedState();
+    var latestTimeentryId = facts.latestTimeentryId();
+    var timeentryCtx = facts.latestTimeentry();
     var items = testApi.listTimeentries(ctx, projectAlias, timeentryCtx.when());
     Assertions.assertThat(items).contains(latestTimeentryId);
   }

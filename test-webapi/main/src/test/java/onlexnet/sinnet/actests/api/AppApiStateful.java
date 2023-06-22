@@ -1,5 +1,7 @@
 package onlexnet.sinnet.actests.api;
 
+import java.util.stream.Stream;
+
 import org.apache.commons.lang3.RandomStringUtils;
 
 import lombok.val;
@@ -15,7 +17,7 @@ import sinnet.gql.models.ProjectEntityGql;
  */
 public class AppApiStateful {
 
-  @Delegate(types = AppApiQuery.class)
+  @Delegate
   private final AppQuery appApi;
 
   private final SessionExpectedState state;
@@ -55,10 +57,6 @@ public class AppApiStateful {
     // var etag = projectId.entity().getEntity().entityVersion;
     // appApi.assignOperator(eid, etag, operatorEmail);
     // state.on(new OperatorAssigned());
-  }
-
-  public int getNumberOfProjects() {
-      return appApi.numberOfProjects().get();
   }
 
 }

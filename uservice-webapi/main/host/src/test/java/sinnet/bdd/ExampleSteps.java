@@ -15,6 +15,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.web.servlet.result.StatusResultMatchers;
 
 import io.cucumber.java.Before;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import onlexnet.sinnet.webapi.test.AppQuery;
@@ -71,7 +72,7 @@ public class ExampleSteps {
 
   ProjectEntityGql expectedCreatedProject;
   ProjectEntityGql lastlyCreatedProject;
-  Integer expectedNumberOfProjects; 
+  Integer expectedNumberOfProjects;
 
   @When("a project is saved")
   public void project_is_saved() {
@@ -108,8 +109,8 @@ public class ExampleSteps {
 
     expectedNumberOfProjects = new Random().nextInt();
     Mockito
-      .when(projectsGrpc.userStats(requestorEmail))
-      .thenReturn(new StatsResult(expectedNumberOfProjects));
+        .when(projectsGrpc.userStats(requestorEmail))
+        .thenReturn(new StatsResult(expectedNumberOfProjects));
   }
 
   @Then("userstats are returned")
@@ -117,11 +118,11 @@ public class ExampleSteps {
     var numberOfProjects = appQuery.numberOfProjects().get();
 
     Mockito
-      .verify(projectsGrpc)
-      .userStats(requestorEmail);
+        .verify(projectsGrpc)
+        .userStats(requestorEmail);
 
     assertThat(numberOfProjects)
-      .isEqualTo(expectedNumberOfProjects);
+        .isEqualTo(expectedNumberOfProjects);
   }
 
 }
