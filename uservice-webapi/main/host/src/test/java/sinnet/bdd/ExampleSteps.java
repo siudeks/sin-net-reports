@@ -76,7 +76,7 @@ public class ExampleSteps {
 
   @When("a project is saved")
   public void project_is_saved() {
-    var projectName = "projectname-" + UUID.randomUUID();
+    var projectNewName = "projectname-" + UUID.randomUUID();
 
     var projectId1 = new ProjectId("1", 1L);
     Mockito
@@ -85,9 +85,9 @@ public class ExampleSteps {
     var projectId2 = new ProjectId("1", 2L);
     Mockito
         .when(
-            projectsGrpc.update(eq(requestorEmail), eq(projectId1), eq(projectName), eq(requestorEmail), eq(List.of())))
+            projectsGrpc.update(eq(requestorEmail), eq(projectId1), eq(projectNewName), eq(requestorEmail), eq(List.of())))
         .thenReturn(projectId2);
-    var saveResult = appQuery.createProject(projectName);
+    var saveResult = appQuery.createProject(projectNewName);
 
     lastlyCreatedProject = saveResult.get();
     expectedCreatedProject = new ProjectEntityGql()
@@ -95,7 +95,7 @@ public class ExampleSteps {
             .setEntityId("1")
             .setEntityVersion(2L)
             .setProjectId("1"))
-        .setName(projectName);
+        .setName(projectNewName);
   }
 
   @Then("operation result is returned")

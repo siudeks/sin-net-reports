@@ -17,6 +17,7 @@ import sinnet.grpc.projects.generated.UpdateCommand;
 import sinnet.grpc.projects.generated.UserStatsRequest;
 import sinnet.grpc.projects.generated.UserToken;
 
+
 /** Mockable equivalent of {@link ProjectsGrpcStub}. */
 @Component
 @RequiredArgsConstructor
@@ -45,6 +46,7 @@ class ProjectsGrpcFacadeImpl implements ProjectsGrpcFacade {
         .setRequestorEmail(requestorEmail)
         .build();
     var desired = ProjectModel.newBuilder()
+        .setName(name)
         .setEmailOfOwner(requestorEmail);
     var updateRequest = UpdateCommand.newBuilder()
         .setUserToken(requestorToken)
