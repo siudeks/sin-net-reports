@@ -12,3 +12,7 @@ Feature: An example
   Scenario: User stats
     When userstats request is send to backend
     Then userstats are returned
+
+  Scenario: Customer creation
+    When Customer creation request is send to backend
+    Then Customer creation result is verified

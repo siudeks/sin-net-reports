@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
+import org.assertj.core.api.Assertions;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -18,28 +19,34 @@ import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import onlexnet.sinnet.webapi.test.AppQuery;
+import onlexnet.sinnet.webapi.test.AppApi;
 import sinnet.domain.ProjectId;
 import sinnet.gql.models.ProjectEntityGql;
 import sinnet.gql.models.SomeEntityGql;
+import sinnet.grpc.CustomersGrpcService;
 import sinnet.grpc.ProjectsGrpcFacade;
 import sinnet.grpc.ProjectsGrpcFacade.StatsResult;
+import sinnet.grpc.common.EntityId;
 
 public class ExampleSteps {
 
   @Autowired
   ProjectsGrpcFacade projectsGrpc;
 
+
+  @Autowired
+  CustomersGrpcService customersGrpc;
+
   @Autowired
   TestRestTemplate restTemplate;
 
   String requestorEmail;
-  AppQuery appQuery;
+  AppApi appApi;
 
   @Before
   public void before() {
     requestorEmail = "email@" + UUID.randomUUID();
-    appQuery = new AppQuery(restTemplate.getRootUri(), requestorEmail);
+    appApi = new AppApi(restTemplate.getRootUri(), requestorEmail);
     Mockito.clearInvocations(projectsGrpc);
   }
 
@@ -56,7 +63,7 @@ public class ExampleSteps {
         .when(projectsGrpc.list(eq(requestorEmail), any()))
         .thenReturn(List.of(grpcResult));
 
-    appQuery.findProjectByName("spring-framework")
+    appApi.findProjectByName("spring-framework")
         .hasSizeGreaterThan(0);
 
   }
@@ -87,7 +94,7 @@ public class ExampleSteps {
         .when(
             projectsGrpc.update(eq(requestorEmail), eq(projectId1), eq(projectNewName), eq(requestorEmail), eq(List.of())))
         .thenReturn(projectId2);
-    var saveResult = appQuery.createProject(projectNewName);
+    var saveResult = appApi.createProject(projectNewName);
 
     lastlyCreatedProject = saveResult.get();
     expectedCreatedProject = new ProjectEntityGql()
@@ -115,7 +122,7 @@ public class ExampleSteps {
 
   @Then("userstats are returned")
   public void userstats_are_returned() {
-    var numberOfProjects = appQuery.numberOfProjects().get();
+    var numberOfProjects = appApi.numberOfProjects().get();
 
     Mockito
         .verify(projectsGrpc)
@@ -123,6 +130,40 @@ public class ExampleSteps {
 
     assertThat(numberOfProjects)
         .isEqualTo(expectedNumberOfProjects);
+  }
+
+  Runnable reserveValidation;
+
+  @When("Customer creation request is send to backend")
+  public void Customer_creation_request_is_send_to_backend() {
+    var projectId = "projectId [" + UUID.randomUUID() + "]";
+
+    var projectVersion = 1L;
+    var expectedCmd = sinnet.grpc.customers.ReserveRequest.newBuilder()
+        .setProjectId(projectId)
+        .build();
+    var expectedResult = sinnet.grpc.customers.ReserveReply.newBuilder()
+        .setEntityId(EntityId.newBuilder()
+            .setEntityId(projectId)
+            .setEntityVersion(projectVersion)
+            .build())
+        .build();
+
+    Mockito
+      .when(customersGrpc.reserve(expectedCmd))
+      .thenReturn(expectedResult);
+
+    reserveValidation = () -> {
+      var reserveCustomerResult = appApi.reserveCustomer(projectId).get();;
+      Assertions.assertThat(reserveCustomerResult.getEntityId()).isEqualTo(projectId);
+      Assertions.assertThat(reserveCustomerResult.getEntityVersion()).isEqualTo(projectVersion);
+    };
+  }
+
+  @Then("Customer creation result is verified")
+  public void Customer_creation_result_is_returned() {
+      reserveValidation.run();
+      reserveValidation = null;
   }
 
 }

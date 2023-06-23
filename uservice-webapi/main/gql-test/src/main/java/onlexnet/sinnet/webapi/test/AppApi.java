@@ -14,15 +14,16 @@ import lombok.SneakyThrows;
 import reactor.netty.http.Http11SslContextSpec;
 import reactor.netty.http.client.HttpClient;
 import sinnet.gql.models.ProjectEntityGql;
+import sinnet.gql.models.SomeEntityGql;
 
 /** Set of methods used to test application functionlity. */
-public class AppQuery {
+public class AppApi {
 
   private final HttpGraphQlTester tester;
 
   /** TBD. */
   @SneakyThrows
-  public AppQuery(String rootUri, String email) {
+  public AppApi(String rootUri, String email) {
     var token = Jwt.createTestJwt(email);
 
     var http11SslContextSpec = Http11SslContextSpec
@@ -73,4 +74,14 @@ public class AppQuery {
         .entity(Integer.class);
   }
 
+  /**
+   * Invokes Customers.reserve
+   */
+  public Entity<SomeEntityGql, ?> reserveCustomer(String projectId) {
+    return tester.documentName("reserveCustomer")
+        .variable("projectId", projectId)
+        .execute()
+        .path("Customers.reserve")
+        .entity(SomeEntityGql.class);
+  }
 }

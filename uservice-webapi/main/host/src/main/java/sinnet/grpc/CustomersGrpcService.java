@@ -36,4 +36,6 @@ public class CustomersGrpcService {
 
   @Delegate(types = CustomersService.class)
   private final CustomersBlockingStub stub;
+
+
 }

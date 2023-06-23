@@ -10,4 +10,13 @@
     "java.debug.settings.onBuildFailureProceed": true,
     "java.checkstyle.configuration": "/home/siudeks/git/sin-net-reports/libs-java/build-tools/src/main/resources/build-checkstyle/google_checks_customized.xml",
     "java.checkstyle.version": "10.7.0",
+    "cucumber.features": [
+        "src/test/**/*.feature",
+        "features/**/*.feature",
+        "tests/**/*.feature",
+        "*specs*/**/.feature"
+    ],
+    "cucumber.glue": [
+        "src/test/**/*.java",
+    ],
 }

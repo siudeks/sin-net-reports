@@ -2,6 +2,7 @@ package sinnet.gql.api;
 
 
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ class CustomersMutationRemove implements CustomerMapper {
 
   private final CustomersGrpcService service;
 
+  @SchemaMapping
   public Boolean remove(CustomersMutation self, @Argument EntityGql id) {
     var cmd = RemoveRequest.newBuilder()
         .setEntityId(toGrpc(id))
