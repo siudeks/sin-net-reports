@@ -16,7 +16,6 @@ import sinnet.write.ActionRepositoryEx;
  */
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class TimeEntriesRpcGet implements RpcQueryHandler<GetQuery, GetReply>, MapperDto {
 
   private final ActionRepositoryEx actionRepository;

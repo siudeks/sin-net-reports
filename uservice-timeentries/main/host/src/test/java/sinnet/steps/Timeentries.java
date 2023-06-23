@@ -1,9 +1,8 @@
 package sinnet.steps;
 
 import org.assertj.core.api.Assertions;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import io.cucumber.java.Before;
-import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -15,12 +14,8 @@ public class Timeentries {
 
   private final TestApi testApi;
 
-  private ClientContext ctx;
-
-  @Before
-  public void initScenarion() {
-    ctx = new ClientContext();
-  }
+  @Autowired
+  public ExpectedState ctx;
 
   @Given("a new project called {projectAlias} is created by {operatorAlias}")
   public void a_new_project_called(ValName projectAlias, ValName operatorAlias) {
@@ -32,8 +27,9 @@ public class Timeentries {
     testApi.addOperator(ctx, operatorAlias, projectAlias);
   }
 
-  @When("the operator creates new timeentry")
-  public void operator_called_creates_new_timeentry() {
+  @When("the {operatorAlias} creates new timeentry")
+  public void operator_called_creates_new_timeentry(ValName operatorName) {
+    ctx.onActiveUser(operatorName);
     testApi.createEntry(ctx);
   }
 
@@ -41,8 +37,8 @@ public class Timeentries {
   public void the_new_timeentry_is_visible_on_the_projectAlias(ValName projectAlias) {
     var facts = ctx.buildExpectedState();
     var latestTimeentryId = facts.latestTimeentryId();
-    var timeentryCtx = facts.latestTimeentry();
-    var items = testApi.listTimeentries(ctx, projectAlias, timeentryCtx.when());
+    var timeentryState = facts.latestTimeentry();
+    var items = testApi.listTimeentries(ctx, projectAlias, timeentryState.when());
     Assertions.assertThat(items).contains(latestTimeentryId);
   }
 }
