@@ -23,10 +23,14 @@ import onlexnet.sinnet.webapi.test.AppApi;
 import sinnet.domain.ProjectId;
 import sinnet.gql.models.ProjectEntityGql;
 import sinnet.gql.models.SomeEntityGql;
+import sinnet.gql.models.UserGql;
 import sinnet.grpc.CustomersGrpcService;
 import sinnet.grpc.ProjectsGrpcFacade;
+import sinnet.grpc.UsersGrpcService;
 import sinnet.grpc.ProjectsGrpcFacade.StatsResult;
 import sinnet.grpc.common.EntityId;
+import sinnet.grpc.common.UserToken;
+import sinnet.grpc.users.UsersSearchModel;
 
 public class ExampleSteps {
 
@@ -36,6 +40,9 @@ public class ExampleSteps {
 
   @Autowired
   CustomersGrpcService customersGrpc;
+
+  @Autowired
+  UsersGrpcService usersGrpc;
 
   @Autowired
   TestRestTemplate restTemplate;
@@ -164,6 +171,41 @@ public class ExampleSteps {
   public void Customer_creation_result_is_returned() {
       reserveValidation.run();
       reserveValidation = null;
+  }
+
+  @When("Users list query is send")
+  public void Users_list_query_is_send() {
+    var projectId = "projectId [" + UUID.randomUUID() + "]";
+
+    var query = sinnet.grpc.users.SearchRequest.newBuilder()
+        .setUserToken(UserToken.newBuilder()
+            .setRequestorEmail(requestorEmail)
+            .setProjectId(projectId))
+        .build();
+    var reply = sinnet.grpc.users.SearchReply.newBuilder()
+        .addItems(UsersSearchModel.newBuilder()
+          .setEmail("my email")
+          .setEntityId("my entity id"))
+        .build();
+
+    Mockito
+      .when(usersGrpc.search(query))
+      .thenReturn(reply);
+
+    userListValidation = () -> {
+      var response = appApi.searchUsers(projectId).get();
+      Assertions.assertThat(response)
+        .containsOnly(new UserGql("my email", "my entity id"));
+    };
+
+  }
+
+  Runnable userListValidation;
+
+  @Then("Users list response is returned")
+  public void Users_list_response_is_returned() {
+    userListValidation.run();
+    userListValidation = null;
   }
 
 }

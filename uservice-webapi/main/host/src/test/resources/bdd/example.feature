@@ -16,3 +16,7 @@ Feature: An example
   Scenario: Customer creation
     When Customer creation request is send to backend
     Then Customer creation result is verified
+
+  Scenario: Users list query
+    When Users list query is send
+    Then Users list response is returned

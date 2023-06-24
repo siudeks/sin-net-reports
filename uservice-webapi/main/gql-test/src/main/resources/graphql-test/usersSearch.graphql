@@ -1,0 +1,9 @@
+query getUsers($projectId: ID!) {
+    Users(projectId: $projectId) {
+        search {
+            email
+            __typename
+        }
+    __typename
+    }
+}

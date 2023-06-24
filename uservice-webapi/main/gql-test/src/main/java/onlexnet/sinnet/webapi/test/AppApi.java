@@ -1,6 +1,7 @@
 package onlexnet.sinnet.webapi.test;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.springframework.graphql.test.tester.GraphQlTester.Entity;
 import org.springframework.graphql.test.tester.GraphQlTester.EntityList;
@@ -15,6 +16,7 @@ import reactor.netty.http.Http11SslContextSpec;
 import reactor.netty.http.client.HttpClient;
 import sinnet.gql.models.ProjectEntityGql;
 import sinnet.gql.models.SomeEntityGql;
+import sinnet.gql.models.UserGql;
 
 /** Set of methods used to test application functionlity. */
 public class AppApi {
@@ -83,5 +85,14 @@ public class AppApi {
         .execute()
         .path("Customers.reserve")
         .entity(SomeEntityGql.class);
+  }
+
+  /** REturns list of all users (emails) related to given project. */
+  public Entity<List<UserGql>, ?> searchUsers(String projectId) {
+    return tester.documentName("usersSearch")
+        .variable("projectId", projectId)
+        .execute()
+        .path("Users.search")
+        .entityList(UserGql.class);
   }
 }
