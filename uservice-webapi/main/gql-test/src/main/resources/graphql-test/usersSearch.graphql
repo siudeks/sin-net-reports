@@ -2,6 +2,7 @@ query getUsers($projectId: ID!) {
     Users(projectId: $projectId) {
         search {
             email
+            entityId
             __typename
         }
     __typename
