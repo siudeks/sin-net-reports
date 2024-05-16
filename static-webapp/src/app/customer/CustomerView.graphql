@@ -80,6 +80,8 @@ query GetCustomer($projectId: ID!, $entityId: ID!) {
         entityCode
         changedWho
         changedWhen
+        otpSecret
+        otpRecoveryKeys
       }
       contacts {
         firstName

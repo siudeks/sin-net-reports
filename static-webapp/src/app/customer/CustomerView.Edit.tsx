@@ -78,7 +78,8 @@ export const CustomerViewEditLocal: React.FC<CustomerViewEditProps> = props => {
                 entityCode: it.entityCode ?? undefined,
                 who: it.changedWho,
                 when: SecretsTimestamp.of(it.changedWhen),
-                code: { type: "UNDEFINED" }
+                otpSecret: it.otpSecret ?? undefined,
+                otpRecoveryKey: it.otpRecoveryKeys ?? undefined
             };
             return ret;
         })
