@@ -41,7 +41,9 @@ query GetCustomer($projectId: ID!, $entityId: ID!) {
         password
         changedWho
         changedWhen
-      }
+        otpSecret
+        otpRecoveryKeys
+}
       secretsEx {
         location
         username

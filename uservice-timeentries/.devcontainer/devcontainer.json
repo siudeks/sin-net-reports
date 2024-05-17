@@ -22,7 +22,7 @@
 		},
 		"ghcr.io/devcontainers/features/java:1": {
 			"installMaven": true,
-			"version": "17",
+			"version": "21",
 			"jdkDistro": "oracle",
 			"gradleVersion": "latest",
 			"mavenVersion": "latest",

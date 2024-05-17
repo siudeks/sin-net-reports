@@ -22,6 +22,7 @@ import sinnet.domain.ProjectId;
 import sinnet.gql.api.CommonMapper;
 import sinnet.gql.models.CustomerInput;
 import sinnet.gql.models.CustomerSecretExInput;
+import sinnet.gql.models.CustomerSecretInput;
 import sinnet.gql.models.ProjectEntityGql;
 import sinnet.gql.models.SomeEntityGql;
 import sinnet.gql.models.UserGql;
@@ -32,6 +33,7 @@ import sinnet.grpc.UsersGrpcService;
 import sinnet.grpc.common.EntityId;
 import sinnet.grpc.common.UserToken;
 import sinnet.grpc.customers.CustomerModel;
+import sinnet.grpc.customers.CustomerSecret;
 import sinnet.grpc.customers.CustomerSecretEx;
 import sinnet.grpc.customers.CustomerValue;
 import sinnet.grpc.customers.UpdateCommand;
@@ -234,19 +236,25 @@ public class StepDefinitions {
           .setEntityVersion(43))
           .build());
 
-    var secretExt = new CustomerSecretExInput()
-        .setEntityCode("entity code 1")
-        .setEntityName("entity name 1")
-        .setLocation("location 1")
-        .setPassword("password 1")
-        .setUsername("username 1")
-        .setOtpSecret("my secret")
-        .setOtpRecoveryKeys("my key1");
+      var secret = new CustomerSecretInput()
+          .setLocation("location 1")
+          .setPassword("password 1")
+          .setUsername("username 1")
+          .setOtpSecret("my secret 1")
+          .setOtpRecoveryKeys("my key 1");
+      var secretExt = new CustomerSecretExInput()
+        .setEntityCode("entity code 2")
+        .setEntityName("entity name 2")
+        .setLocation("location 2")
+        .setPassword("password 2")
+        .setUsername("username 2")
+        .setOtpSecret("my secret 2")
+        .setOtpRecoveryKeys("my key 2");
     var actual = appApi.saveCustomer(
       projectId,
       new SomeEntityGql().setProjectId(projectIdStr).setEntityId(entityIdStr).setEntityVersion(42L),
       new CustomerInput(),
-      List.of(),
+      List.of(secret),
       List.of(secretExt),
       List.of()).get();
 
@@ -262,14 +270,22 @@ public class StepDefinitions {
             .setProjectId(projectIdStr)
             .setEntityId(entityIdStr)
             .setEntityVersion(42))
-          .addSecretEx(CustomerSecretEx.newBuilder()
-            .setEntityCode("entity code 1")
-            .setEntityName("entity name 1")
+          .addSecrets(CustomerSecret.newBuilder()
             .setLocation("location 1")
             .setPassword("password 1")
             .setUsername("username 1")
-            .setOtpSecret("my secret")
-            .setOtpRecoveryKeys("my key1")
+            .setOtpSecret("my secret 1")
+            .setOtpRecoveryKeys("my key 1")
+            .setChangedWho(requestorEmail)
+            .setChangedWhen(CommonMapper.toGrpc(timeProvider.now())))
+          .addSecretEx(CustomerSecretEx.newBuilder()
+            .setEntityCode("entity code 2")
+            .setEntityName("entity name 2")
+            .setLocation("location 2")
+            .setPassword("password 2")
+            .setUsername("username 2")
+            .setOtpSecret("my secret 2")
+            .setOtpRecoveryKeys("my key 2")
             .setChangedWho(requestorEmail)
             .setChangedWhen(CommonMapper.toGrpc(timeProvider.now())))
           .setValue(CustomerValue.newBuilder()))

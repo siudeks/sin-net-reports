@@ -10,4 +10,6 @@ public class CustomerSecretGql {
   private String password;
   private String changedWhen;
   private String changedWho;
+  private String otpSecret;
+  private String otpRecoveryKeys;
 }

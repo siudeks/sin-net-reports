@@ -82,7 +82,7 @@ export const ActionViewEditLocal: React.FC<ActionViewEditProps> = props => {
         (newValue: LocalDate) => {
             setActionDate(newValue);
         },
-        versionedProps,
+        [ ],
     );
 
     const defaultCustomerId = item?.customer?.id.entityId;

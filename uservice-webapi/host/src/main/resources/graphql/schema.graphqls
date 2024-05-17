@@ -80,6 +80,8 @@ type CustomerSecret {
   location: String!
   password: String
   username: String
+  otpSecret: String
+  otpRecoveryKeys: String
 }
 
 type CustomerSecretEx {
@@ -228,6 +230,8 @@ input CustomerSecretInput {
   location: String!
   password: String
   username: String
+  otpSecret: String
+  otpRecoveryKeys: String
 }
 
 input MyEntity {

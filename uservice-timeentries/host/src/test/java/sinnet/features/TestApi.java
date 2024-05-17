@@ -26,6 +26,7 @@ import sinnet.grpc.projects.generated.CreateRequest;
 import sinnet.grpc.timeentries.LocalDate;
 import sinnet.grpc.timeentries.SearchQuery;
 import sinnet.grpc.users.IncludeOperatorCommand;
+import sinnet.models.CustomerSecret;
 import sinnet.models.CustomerSecretEx;
 import sinnet.models.CustomerValue;
 import sinnet.models.ProjectId;
@@ -51,13 +52,17 @@ public class TestApi {
     ctx.on(new CustomerReservedAppEvent(customerAlias, entityId));
   }
 
-  public void updateReservedCustomer(ClientContext ctx, ValName customerAlias, CustomerValue customerValue, List<CustomerSecretEx> secretsExt) {
+  public void updateReservedCustomer(ClientContext ctx, ValName customerAlias, CustomerValue customerValue,
+    List<CustomerSecret> secrets,
+    List<CustomerSecretEx> secretsExt) {
     var id = ctx.reservedCustomer;
+    var secretsDto = secrets.stream().map(it -> MapperDto.toDto(it)).toList();
     var secretsExtDto = secretsExt.stream().map(it -> MapperDto.toDto(it)).toList();
     var cmd = UpdateCommand.newBuilder()
         .setModel(CustomerModel.newBuilder()
           .setId(id)
           .setValue(MapperDto.toDto(customerValue))
+          .addAllSecrets(secretsDto)
           .addAllSecretEx(secretsExtDto))
         .build();
     var result = rpcApi.getCustomers().update(cmd);

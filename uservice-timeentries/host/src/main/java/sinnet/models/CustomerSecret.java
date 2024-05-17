@@ -17,4 +17,6 @@ public final class CustomerSecret {
   private String password;
   private ValEmail changedWho = ValEmail.empty();
   private LocalDateTime changedWhen;
+  private String otpSecret;
+  private String otpRecoveryKeys;
 }

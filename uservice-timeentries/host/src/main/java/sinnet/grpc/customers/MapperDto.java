@@ -110,6 +110,8 @@ public interface MapperDto extends Mapper {
         .set(value.getPassword(), b -> b::setPassword)
         .set(Option.of(value.getChangedWho().value()).getOrElse("?"), b -> b::setChangedWho)
         .set(toDto(value.getChangedWhen()), b -> b::setChangedWhen)
+        .set(value.getOtpSecret(), b -> b::setOtpSecret)
+        .set(value.getOtpRecoveryKeys(), b -> b::setOtpRecoveryKeys)
         .done().build();
   }
 
@@ -160,7 +162,9 @@ public interface MapperDto extends Mapper {
         .setPassword(item.getPassword())
         .setUsername(item.getUsername())
         .setChangedWho(ValEmail.of(item.getChangedWho()))
-        .setChangedWhen(fromDto(item.getChangedWhen()));
+        .setChangedWhen(fromDto(item.getChangedWhen()))
+        .setOtpSecret(item.getOtpSecret())
+        .setOtpRecoveryKeys(item.getOtpRecoveryKeys());
   }
 
   /**

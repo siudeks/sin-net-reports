@@ -10,7 +10,6 @@ import { SecretsTimestamp } from "./SecretsTimestamp";
 import { NewSecret } from "./View.NewSecret";
 import { UserPasswordItem } from "./View.UserPasswordItem";
 import { UserPasswordItemExt } from "./View.UserPasswordItemEx";
-import { CodeType } from "./CodeType";
 
 
 const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
@@ -119,7 +118,8 @@ export interface SecretExModel {
     entityCode?: string
     who?: string
     when?: SecretsTimestamp
-    code: CodeType
+    otpSecret?: string
+    otpRecoveryKeys?: string
 }
 
 interface CustomerViewProps {
@@ -299,7 +299,9 @@ export const CustomerView: React.FC<CustomerViewProps> = props => {
                     username: it.username,
                     password: it.password,
                     entityName: it.entityName,
-                    entityCode: it.entityCode
+                    entityCode: it.entityCode,
+                    otpSecret: it.otpSecret,
+                    otpRecoveryKeys: it.otpRecoveryKeys
                 };
                 return ret;
             })
@@ -575,9 +577,8 @@ export const CustomerView: React.FC<CustomerViewProps> = props => {
                                                     onChange={v => {
                                                         const clone = _.clone(model);
                                                         const index = _.findIndex(clone.AutoryzacjeEx, it => it.localKey === v.localKey);
-                                                        const actual = clone.AutoryzacjeEx[index];
                                                         // update new values and clone read-only values
-                                                        const readOnlyValues = { code: actual.code };
+                                                        const readOnlyValues = { };
                                                         const newValue = { ...v, ...readOnlyValues}
                                                         clone.AutoryzacjeEx[index] = newValue ;
                                                         setModel(clone);
@@ -615,8 +616,7 @@ export const CustomerView: React.FC<CustomerViewProps> = props => {
                                                     const localKey = uuid();
                                                     const newItem: SecretExModel = {
                                                         localKey,
-                                                        location: name,
-                                                        code: { type: "UNDEFINED" }
+                                                        location: name
                                                     };
                                                     clone.AutoryzacjeEx.push(newItem);
                                                     setModel(clone);

@@ -104,6 +104,22 @@ public interface CustomerMapper extends CommonMapper {
         .done().build();
   }
 
+  /** Doc me. */
+  default sinnet.grpc.customers.CustomerSecret toGrpc(CustomerSecretInput it, LocalDateTime whenChanged, String whoChanged) {
+    if (it == null) {
+      return null;
+    }
+    return PropsBuilder.build(sinnet.grpc.customers.CustomerSecret.newBuilder())
+        .set(b -> b::setLocation, it.getLocation())
+        .set(b -> b::setUsername, it.getUsername())
+        .set(b -> b::setPassword, it.getPassword())
+        .set(b -> b::setChangedWhen, CommonMapper.toGrpc(whenChanged))
+        .set(b -> b::setChangedWho, whoChanged)
+        .set(b -> b::setOtpSecret, it.getOtpSecret())
+        .set(b -> b::setOtpRecoveryKeys, it.getOtpRecoveryKeys())
+        .done().build();
+  }
+
   /** Fixme. */
   default sinnet.grpc.customers.CustomerContact toGrpc(CustomerContactInputGql it) {
     if (it == null) {
@@ -117,20 +133,6 @@ public interface CustomerMapper extends CommonMapper {
         .done().build();
   }
   
-  /** Doc me. */
-  default sinnet.grpc.customers.CustomerSecret toGrpc(CustomerSecretInput it, LocalDateTime whenChanged, String whoChanged) {
-    if (it == null) {
-      return null;
-    }
-    return PropsBuilder.build(sinnet.grpc.customers.CustomerSecret.newBuilder())
-        .set(b -> b::setLocation, it.getLocation())
-        .set(b -> b::setUsername, it.getUsername())
-        .set(b -> b::setPassword, it.getPassword())
-        .set(b -> b::setChangedWhen, CommonMapper.toGrpc(whenChanged))
-        .set(b -> b::setChangedWho, whoChanged)
-        .done().build();
-  }
-
   /** Doc me. */
   default SomeEntityGql toGql(EntityId id) {
     if (id == null) {
@@ -184,6 +186,8 @@ public interface CustomerMapper extends CommonMapper {
     result.setPassword(it.getPassword());
     result.setChangedWhen(Option.of(map(it.getChangedWhen())).map(timestampFormatter::format).getOrElse("?"));
     result.setChangedWho(it.getChangedWho());
+    result.setOtpSecret(it.getOtpSecret());
+    result.setOtpRecoveryKeys(it.getOtpRecoveryKeys());
     return result;
   }
 

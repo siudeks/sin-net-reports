@@ -109,7 +109,9 @@ public final class CustomerRepositoryEx implements MapperDbo {
         .setPassword(it.getPassword())
         .setUsername(it.getUsername())
         .setChangedWhen(it.getChangedWhen())
-        .setChangedWho(it.getChangedWho().value());
+        .setChangedWho(it.getChangedWho().value())
+        .setOtpSecret(it.getOtpSecret())
+        .setOtpRecoveryKeys(it.getOtpRecoveryKeys());
   }
 
   CustomerDboSecretEx toDbo(CustomerSecretEx it) {

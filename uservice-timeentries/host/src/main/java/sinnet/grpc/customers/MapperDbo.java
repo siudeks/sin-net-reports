@@ -50,7 +50,9 @@ public interface MapperDbo {
       .setPassword(dbo.getPassword())
       .setLocation(dbo.getLocation())
       .setChangedWho(ValEmail.of(dbo.getChangedWho()))
-      .setChangedWhen(dbo.getChangedWhen());
+      .setChangedWhen(dbo.getChangedWhen())
+      .setOtpSecret(dbo.getOtpSecret())
+      .setOtpRecoveryKeys(dbo.getOtpRecoveryKeys());
   }
 
   /**

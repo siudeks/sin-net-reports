@@ -99,6 +99,8 @@ message CustomerSecret {
   string password = 3;
   string changedWho  = 4;
   LocalDateTime changedWhen = 5;
+  string otpSecret = 6;
+  string otpRecoveryKeys = 7;
 }
 
 message CustomerSecretEx {
